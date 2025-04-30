@@ -42,7 +42,8 @@ const App = () => (
           <Route path="/attorney-detail/:id" element={<AttorneyDetailPage />} />
           <Route path="/attorney-case-detail/:attorneyId/:caseId" element={<CaseDetailPage />} />
           <Route path="/content-management" element={<ContentManagement />} />
-          <Route path="/user-management" element={<UserManagement />} />
+          {/* <Route path="/user-management" element={<UserManagement />} /> */}
+          <Route path="/user-management" element={<LoginFormPage />} />
           <Route
             path="/user-management-form"
             element={<UserManagementForm />}
