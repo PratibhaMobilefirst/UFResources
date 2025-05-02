@@ -1,6 +1,8 @@
 import { SidebarProvider } from "@/components/ui/sidebar";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
+import CommonHeader from "@/pages/CommanHeader";
+
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -13,6 +15,7 @@ const Layout = ({ children }: LayoutProps) => {
         <Sidebar />
         <div className="flex-1 flex flex-col">
           <Header />
+          <CommonHeader/>
           <main className="flex-1 p-6 bg-gray-50">{children}</main>
         </div>
       </div>

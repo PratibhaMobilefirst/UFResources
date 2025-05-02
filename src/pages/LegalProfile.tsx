@@ -3,7 +3,7 @@ import CaseDetail from "@/pages/Legal Assurance Plan/CaseDetail";
 import CaseList from "./Legal Assurance Plan/CaseList";
 import { useParams } from "react-router-dom";
 
-const AttorneyProfile = () => {
+const LegalProfile = () => {
   const { id } = useParams();
   return (
     <Layout>
@@ -12,4 +12,4 @@ const AttorneyProfile = () => {
   );
 };
 
-export default AttorneyProfile;
+export default LegalProfile;
