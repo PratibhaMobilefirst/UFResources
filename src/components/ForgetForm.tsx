@@ -6,32 +6,21 @@ import { useToast } from "@/components/ui/use-toast";
 import BackArrow from "/lovable-uploads/BackArrow.svg";
 import { useNavigate } from "react-router-dom";
 import { Formik, Form } from "formik";
-import * as Yup from "yup";
 
-// Validation schema using Yup
-const validationSchema = Yup.object({
-  email: Yup.string()
-    .email("Invalid email address")
-    .required("Email is required"),
-});
+import validationSchemaForgetForm from "@/validation/validationSchemaForgetForm";
+import { useForgotPassword } from "@/hooks/useForgotPassword";
 
 const ForgetForm = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const forgetPasswordMutation = useForgotPassword();
 
   const backpage = () => {
-    window.location.href = "/";
+    navigate("/");
   };
 
   const handleSubmit = (values: { email: string }) => {
-    // In a real application, you would handle authentication here
-    toast({
-      title: "Forgot Password",
-      description: "Processing your password reset request...",
-    });
-
-    // Navigate to the set password page
-    navigate("/set-password");
+    forgetPasswordMutation.mutate(values);
   };
 
   return (
@@ -39,7 +28,7 @@ const ForgetForm = () => {
       <CardContent className="p-8">
         <Formik
           initialValues={{ email: "" }}
-          validationSchema={validationSchema}
+          validationSchema={validationSchemaForgetForm}
           onSubmit={handleSubmit}
         >
           {({
@@ -91,9 +80,13 @@ const ForgetForm = () => {
                 <Button
                   type="submit"
                   className="w-full bg-[#004b7a] hover:bg-[#00395d] text-white py-2 h-12"
-                  disabled={isSubmitting}
+                  disabled={forgetPasswordMutation.status === "pending"}
                 >
-                  Send Reset Link
+                  {}
+                  {/* Send Reset Link */}
+                  {forgetPasswordMutation.status === "pending"
+                    ? "Loading..."
+                    : "Send Reset Link"}
                 </Button>
               </div>
             </Form>

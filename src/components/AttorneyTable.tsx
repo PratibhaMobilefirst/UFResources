@@ -279,72 +279,80 @@ const AttorneyTable = () => {
       </Dialog>
 
       {/* Edit Role Dialog */}
-   
-<Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
-  <DialogContent className="max-w-md  p-26  rounder-full bg-white overflow-hidden border border-gray-200 rounded-xl">
-    <DialogHeader className="p-6   pb-0 border-b-0">
-      <h3 className="text-lg font-semibold">Edit Network Attorney Role</h3>
-    </DialogHeader>
-    <div className="px-6 pt-4 pb-0 mr-16">
-      {/* 3-column info row */}
-      <div className="grid grid-cols-3 gap-6 mb-6">
-        <div>
-          <div className="text-xs text-gray-500 mb-1">Name</div>
-          <div className="font-bold text-base">{currentAttorney?.name}</div>
-        </div>
-        <div>
-          <div className="text-xs text-gray-500 mb-1">State</div>
-          <div className="font-bold text-base">{currentAttorney?.state}</div>
-        </div>
-        <div>
-          <div className="text-xs  text-gray-500 mb-1">Email ID</div>
-          <div className="font-bold text-base">{currentAttorney?.email}</div>
-        </div>
-      </div>
-      {/* Role dropdown */}
-      <div className="mb-2">
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Role
-        </label>
-        <Select
-          defaultValue={
-            currentAttorney?.role !== "N/A" ? currentAttorney?.role : ""
-          }
-        >
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="NA" />
-          </SelectTrigger>
-          
 
-<SelectContent>
-            <SelectItem value="Lead Attorney">Lead Attorney</SelectItem>
-            <SelectItem value="Senior Attorney">Senior Attorney</SelectItem>
-            <SelectItem value="Junior Attorney">Junior Attorney</SelectItem>
-            <SelectItem value="N/A">NA</SelectItem>
-          </SelectContent>
-     
+      <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
+        <DialogContent className="max-w-md  p-26  rounder-full bg-white overflow-hidden border border-gray-200 rounded-xl">
+          <DialogHeader className="p-6   pb-0 border-b-0">
+            <h3 className="text-lg font-semibold">
+              Edit Network Attorney Role
+            </h3>
+          </DialogHeader>
+          <div className="px-6 pt-4 pb-0 mr-16">
+            {/* 3-column info row */}
+            <div className="grid grid-cols-3 gap-6 mb-6">
+              <div>
+                <div className="text-xs text-gray-500 mb-1">Name</div>
+                <div className="font-bold text-base">
+                  {currentAttorney?.name}
+                </div>
+              </div>
+              <div>
+                <div className="text-xs text-gray-500 mb-1">State</div>
+                <div className="font-bold text-base">
+                  {currentAttorney?.state}
+                </div>
+              </div>
+              <div>
+                <div className="text-xs  text-gray-500 mb-1">Email ID</div>
+                <div className="font-bold text-base">
+                  {currentAttorney?.email}
+                </div>
+              </div>
+            </div>
+            {/* Role dropdown */}
+            <div className="mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Role
+              </label>
+              <Select
+                defaultValue={
+                  currentAttorney?.role !== "N/A" ? currentAttorney?.role : ""
+                }
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="NA" />
+                </SelectTrigger>
 
-     </Select>
-      </div>
-    </div>
-    <DialogFooter className="bg-white border-t border-gray-100 p-4 flex justify-end gap-2">
-      <Button
-        variant="outline"
-        onClick={() => setEditDialogOpen(false)}
-        className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50"
-      >
-        Cancel
-      </Button>
-      <Button
-        onClick={() => setEditDialogOpen(false)}
-        className="bg-[#00426E] text-white hover:bg-blue-900"
-      >
-        Save
-      </Button>
-    </DialogFooter>
-  </DialogContent>
-</Dialog>
-
+                <SelectContent>
+                  <SelectItem value="Lead Attorney">Lead Attorney</SelectItem>
+                  <SelectItem value="Senior Attorney">
+                    Senior Attorney
+                  </SelectItem>
+                  <SelectItem value="Junior Attorney">
+                    Junior Attorney
+                  </SelectItem>
+                  <SelectItem value="N/A">NA</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <DialogFooter className="bg-white border-t border-gray-100 p-4 flex justify-end gap-2">
+            <Button
+              variant="outline"
+              onClick={() => setEditDialogOpen(false)}
+              className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={() => setEditDialogOpen(false)}
+              className="bg-[#00426E] text-white hover:bg-blue-900"
+            >
+              Save
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

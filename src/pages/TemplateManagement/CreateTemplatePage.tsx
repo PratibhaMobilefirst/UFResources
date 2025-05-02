@@ -79,7 +79,7 @@ const CreateTemplatePage = () => {
               <div className="bg-[#D4EDFF] p-1.5 rounded-full">
                 <ChevronLeft className="h-4 w-4 text-[#00426E]" />
               </div>
-              Create Template Card
+              Create Template Card 
             </Button>
           </div>
           

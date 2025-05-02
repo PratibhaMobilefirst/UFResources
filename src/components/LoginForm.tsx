@@ -7,49 +7,21 @@ import Logo from "/lovable-uploads/Logo.svg";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
-
-// Validation schema using Yup
-const validationSchema = Yup.object({
-  email: Yup.string()
-    .email("Invalid email address")
-    .required("Email is required"),
-  password: Yup.string().required("Password is required"),
-});
-
+import { useLogin } from "@/hooks/useLogin";
+import validationSchemaLogin from "@/validation/validationSchemaLogin";
 const LoginForm = () => {
-  const { toast } = useToast();
-  const navigate = useNavigate();
+  const loginMutation = useLogin();
+  console.log({ loginMutation });
 
   // Handle form submission
   const handleSubmit = (values: { email: string; password: string }) => {
     // Simulate a login attempt
 
-    if (
-      values.email === "admin@example.com" &&
-      values.password === "admin123"
-    ) {
-      toast({
-        title: "Login attempt",
-        description: "Processing your login...",
-      });
-      sessionStorage.setItem(
-        "access_token",
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
-      );
-      navigate("/content-management");
-    } else {
-      toast({
-        title: "Error",
-        description: "Invalid email or password",
-        variant: "destructive",
-      });
-    }
-    toast({
-      title: "Login attempt",
-      description: "Processing your login...",
-    });
-
-    console.log(values); // You can replace this with your actual authentication logic
+    const data = {
+      username: values.email,
+      password: values.password,
+    };
+    loginMutation.mutate(data);
   };
 
   return (
@@ -66,7 +38,7 @@ const LoginForm = () => {
         {/* Formik Form */}
         <Formik
           initialValues={{ email: "", password: "" }}
-          validationSchema={validationSchema}
+          validationSchema={validationSchemaLogin}
           onSubmit={handleSubmit}
         >
           {({
@@ -140,8 +112,10 @@ const LoginForm = () => {
                 <Button
                   type="submit"
                   className="w-full bg-[#004b7a] hover:bg-[#00395d] text-white py-2 h-12"
+                  disabled={loginMutation.status === "pending"}
                 >
-                  Login
+                  {/* Login */}
+                  {loginMutation.status === "pending" ? "Loading..." : "Login"}
                 </Button>
               </div>
             </Form>

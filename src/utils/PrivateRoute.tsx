@@ -1,9 +1,9 @@
-import { Outlet, Navigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
+import { useAuthStore } from "@/store/useAuthStore";
 
-const PrivateRoutes = () => {
-  const authToken = sessionStorage.getItem("access_token");
-  const auth = { token: authToken ? true : false };
-  return auth.token ? <Outlet /> : <Navigate to="/" />;
+const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
+  const token = useAuthStore((state) => state.token);
+  return token ? children : <Navigate to="/" replace />;
 };
 
-export default PrivateRoutes;
+export default ProtectedRoute;

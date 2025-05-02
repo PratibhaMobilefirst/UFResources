@@ -7,37 +7,23 @@ import BackArrow from "/lovable-uploads/BackArrow.svg";
 import { useNavigate } from "react-router-dom";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-
-// Validation schema using Yup
-const validationSchema = Yup.object({
-  password: Yup.string()
-    .required("Password is required")
-    .min(6, "Password must be at least 6 characters long"),
-  confirmPassword: Yup.string()
-    .required("Confirm Password is required")
-    .oneOf([Yup.ref("password"), null], "Passwords must match"),
-});
+import { useResetPassword } from "@/hooks/useResetPassword";
+import { passwordValidationSchema } from "@/validation/validationSchemasetpassword";
 
 const NewPasswordForm = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
+  const resetPasswordMutation = useResetPassword();
 
   const backpage = () => {
-    window.location.href = "/";
+    navigate("/");
   };
 
   const handleSubmit = (values: {
     password: string;
     confirmPassword: string;
   }) => {
-    // In a real application, you would handle password change here
-    toast({
-      title: "Password Changed",
-      description: "Your password has been successfully updated.",
-    });
-
-    // Navigate to success page after password change
-    navigate("/success-popup");
+    resetPasswordMutation.mutate(values);
   };
 
   return (
@@ -45,7 +31,7 @@ const NewPasswordForm = () => {
       <CardContent className="p-8">
         <Formik
           initialValues={{ password: "", confirmPassword: "" }}
-          validationSchema={validationSchema}
+          validationSchema={passwordValidationSchema}
           onSubmit={handleSubmit}
         >
           {({
@@ -126,9 +112,11 @@ const NewPasswordForm = () => {
                 <Button
                   type="submit"
                   className="w-full bg-[#004b7a] hover:bg-[#00395d] text-white py-2 h-12"
-                  disabled={isSubmitting}
+                  disabled={resetPasswordMutation.status === "pending"}
                 >
-                  Change Password
+                  {resetPasswordMutation.status === "pending"
+                    ? "Loading..."
+                    : "Change Password"}
                 </Button>
               </div>
             </Form>

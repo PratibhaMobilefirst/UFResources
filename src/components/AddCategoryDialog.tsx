@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -9,9 +8,10 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Plus } from "lucide-react";
-import { Formik, Form, ErrorMessage } from "formik";
+import { Plus, Loader2 } from "lucide-react";
+import { Formik, Form } from "formik";
 import * as Yup from "yup";
+import { useCreateCategory } from "@/hooks/useCreateCategory";
 
 interface AddCategoryDialogProps {
   open: boolean;
@@ -19,6 +19,8 @@ interface AddCategoryDialogProps {
 }
 
 const AddCategoryDialog = ({ open, setOpen }: AddCategoryDialogProps) => {
+  const createCategoryMutation = useCreateCategory();
+
   const validationSchema = Yup.object({
     category: Yup.string()
       .required("Category name is required")
@@ -26,10 +28,9 @@ const AddCategoryDialog = ({ open, setOpen }: AddCategoryDialogProps) => {
       .max(50, "Category name cannot be longer than 50 characters"),
   });
 
-  const handleSubmit = (values: { category: string }) => {
-    // Handle category creation logic here
-    console.log("Category Created: ", values.category);
-    setOpen(false); // Close dialog after submission
+  const handleSubmit = async (values: { category: string }) => {
+    await createCategoryMutation.mutateAsync(values.category);
+    setOpen(false); // Close dialog after successful submission
   };
 
   return (
@@ -68,9 +69,9 @@ const AddCategoryDialog = ({ open, setOpen }: AddCategoryDialogProps) => {
                     className="mt-1"
                     value={values.category}
                     onChange={handleChange}
-                    // onBlur={handleBlur} // Ensure touched state is updated
+                    onBlur={handleBlur}
+                    disabled={createCategoryMutation.isPending}
                   />
-                  {/* Show error only when field is touched and has an error */}
                   {touched.category && errors.category && (
                     <div className="text-red-500 text-sm">
                       {errors.category}
@@ -83,15 +84,26 @@ const AddCategoryDialog = ({ open, setOpen }: AddCategoryDialogProps) => {
                     variant="outline"
                     onClick={() => setOpen(false)}
                     type="button"
+                    disabled={createCategoryMutation.isPending}
                   >
                     Cancel
                   </Button>
                   <Button
                     className="bg-[#00426E] hover:bg-[#00426E]/90"
                     type="submit"
-                    disabled={Boolean(errors.category && touched.category)} // Disable if errors exist
+                    disabled={
+                      Boolean(errors.category && touched.category) ||
+                      createCategoryMutation.isPending
+                    }
                   >
-                    Create
+                    {createCategoryMutation.isPending ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Creating...
+                      </>
+                    ) : (
+                      "Create"
+                    )}
                   </Button>
                 </div>
               </div>

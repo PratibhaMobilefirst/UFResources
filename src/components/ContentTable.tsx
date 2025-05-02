@@ -27,7 +27,10 @@ interface Column {
 interface ContentTableProps {
   data: any[];
   columns: Column[];
-  showEditIcon?: boolean; // Flag to control whether Edit icon is shown
+  showActions?: boolean;
+  onEdit?: (id: string) => void;
+  onDelete?: (id: string) => void;
+  onToggleStatus?: (id: string) => void;
 }
 
 const ITEMS_PER_PAGE = 5;
@@ -35,7 +38,10 @@ const ITEMS_PER_PAGE = 5;
 const ContentTable = ({
   data,
   columns,
-  showEditIcon = false,
+  showActions = false,
+  onEdit,
+  onDelete,
+  onToggleStatus,
 }: ContentTableProps) => {
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -50,89 +56,91 @@ const ContentTable = ({
         <TableHeader>
           <TableRow className="bg-[#F2FAFF]">
             {columns.map((column) => (
-              <TableHead key={column.accessorKey} className="text-[#035C98] font-medium">
+              <TableHead 
+                key={column.accessorKey} 
+                className="text-[#035C98] font-medium text-center"
+              >
                 {column.header}
               </TableHead>
             ))}
+            {showActions && (
+              <TableHead className="text-[#035C98] font-medium text-center">
+                Action
+              </TableHead>
+            )}
           </TableRow>
         </TableHeader>
         <TableBody>
           {currentData.map((row) => (
             <TableRow key={row.id}>
               {columns.map((column) => (
-                <TableCell key={column.accessorKey} className="text-[#777777]">
+                <TableCell 
+                  key={column.accessorKey} 
+                  className="text-[#777777] text-center"
+                >
                   {column.accessorKey === "status" ? (
-                    <Switch
-                      checked={row[column.accessorKey]}
-                      className="data-[state=checked]:bg-green-500"
-                    />
+                    <div className="flex justify-center">
+                      <Switch
+                        checked={row[column.accessorKey]}
+                        onCheckedChange={() => onToggleStatus?.(row.sno)}
+                        className="data-[state=checked]:bg-green-500"
+                      />
+                    </div>
                   ) : (
                     row[column.accessorKey]
                   )}
                 </TableCell>
               ))}
+              {showActions && (
+                <TableCell className="text-center">
+                  <div className="flex justify-center gap-2">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 text-gray-500 hover:text-gray-700"
+                      onClick={() => onEdit?.(row.sno)}
+                    >
+                      <Edit className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 text-gray-500 hover:text-red-600"
+                      onClick={() => onDelete?.(row.sno)}
+                    >
+                      <Trash className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </TableCell>
+              )}
             </TableRow>
           ))}
         </TableBody>
       </Table>
 
-      {totalPages > 1 && (
-        <div className="mt-4 flex justify-between items-center w-full ">
-          <Pagination>
-            <PaginationContent>
-              <PaginationItem>
-                {/* <PaginationPrevious
-                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                  className="text-[#00426E]"
-                  disabled={currentPage === 1}
-                /> */}
-                <Button
-                  variant="outline"
-                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                  disabled={currentPage === 1}
-                >
-                  Previous
-                </Button>
-              </PaginationItem>
-              {/* {[...Array(totalPages)].map((_, i) => (
-                <PaginationItem key={i + 1}>
-                  <PaginationLink
-                    onClick={() => setCurrentPage(i + 1)}
-                    isActive={currentPage === i + 1}
-                    className={
-                      currentPage === i + 1 ? "bg-[#00426E] text-white" : ""
-                    }
-                  >
-                    {i + 1}
-                  </PaginationLink>
-                </PaginationItem>
-              ))} */}
+      <div className="mt-6 flex justify-between items-center w-full">
+        <Button
+          variant="outline"
+          onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+          disabled={currentPage === 1}
+          className="border border-[#D1D5DB] bg-white text-[#374151] hover:bg-gray-50 px-4 py-2 text-sm font-medium rounded"
+        >
+          Previous
+        </Button>
 
-              <span className="text-center">
-                Page {currentPage} of {totalPages}
-              </span>
-              <PaginationItem>
-                {/* <PaginationNext
-                  onClick={() =>
-                    setCurrentPage((p) => Math.min(totalPages, p + 1))
-                  }
-                  className="text-[#00426E]"
-                  disabled={currentPage === totalPages}
-                /> */}
-                <Button
-                  variant="outline"
-                  onClick={() =>
-                    setCurrentPage((p) => Math.min(totalPages, p + 1))
-                  }
-                  disabled={currentPage === totalPages}
-                >
-                  Next
-                </Button>
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
-        </div>
-      )}
+        <span className="text-sm text-[#6B7280]">
+          Page {currentPage} of {totalPages}
+        </span>
+
+        <Button
+          variant="outline"
+          onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+          disabled={currentPage === totalPages}
+          className="border border-[#D1D5DB] bg-white text-[#374151] hover:bg-gray-50 px-4 py-2 text-sm font-medium rounded"
+        >
+          Next
+        </Button>
+      </div>
     </div>
   );
 };

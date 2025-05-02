@@ -13,8 +13,10 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const TemplateManagementPage = () => {
+  const navigate= useNavigate()
   const [currentTab, setCurrentTab] = useState("network-attorney");
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -100,7 +102,7 @@ const TemplateManagementPage = () => {
             <div className="w-full md:w-1/2 flex items-end justify-end">
               <Button 
                 className="bg-[#00426E] hover:bg-[#003058]"
-                onClick={() => window.location.href = "/template-management/create"}
+                onClick={() => navigate( "/template-management/create")}
               >
                 Create Template Card
               </Button>
