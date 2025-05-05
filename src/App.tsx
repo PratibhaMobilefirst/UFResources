@@ -3,33 +3,21 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { SidebarProvider } from "@/components/ui/sidebar/SidebarProvider";
-import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import NewPasswordPage from "./pages/NewPasswordPage";
 import ForgetPage from "./pages/ForgetPage";
 import SuccessPopuppage from "./pages/SuccessPopuppage";
-import AttorneyManagement from "./pages/Attorney Management/AttorneyManagement";
-import AttorneyDetailPage from "./pages/Attorney Management/AttorneyDetailPage";
-import CaseDetailPage from "./pages/Attorney Management/CaseDetailPage";
-import ContentManagement from "./pages/ContentManagement/ContentManagement";
 import PrivateRoutes from "./utils/PrivateRoute";
 import LoginFormPage from "./pages/LoginFormPage";
-import UserManagement from "./pages/UserManagement/UserManagement";
-import UserManagementForm from "./pages/UserManagement/UserManagementForm";
-import CreateRole from "./pages/UserManagement/CreateRole";
-import RoleCreationPage from "./pages/UserManagement/RoleCreationPage";
-import { ReportPage } from "./pages/Report Management/Report";
-import ApproveTemplatePage from "./pages/ApproveTemplate/ApproveTemplatePage";
-import TemplateManagementPage from "./pages/TemplateManagement/TemplateManagementPage";
-import TemplateDetailPage from "./pages/TemplateManagement/TemplateDetailPage";
-import CreateTemplatePage from "./pages/TemplateManagement/CreateTemplatePage";
-import ClauseManagementPage from "./pages/Clause Management/ClauseManagementPage";
+import CaseDetail from "./pages/Legal Assurance Plan/CaseDetail";
+import LegalProfile from "./pages/LegalProfile";
+import CreateEngagementLetter from "./pages/Legal Assurance Plan/CreateEngagementLetter";
 import TemplateEditorPage from "./pages/Upload Template/TemplateEditorPagr";
-import UploadTemplate from "./pages/Upload Template/UploadTemplate";
-import CampaignManagement from "./pages/Campaign Management/CampaignManagementPage";
-import CreateCampaign from "./pages/Campaign Management/CreateCampaign";
-import CampaignQuestionnaire from "./pages/Campaign Management/CampaignQuestionaries";
+import CreateDocument from "./pages/Legal Assurance Plan/CreateDocument";
+import PersonlaPage from "./pages/Presonal/PersonlaPage";
+import CreateNewCasePersonal from "./pages/Presonal/CreateNewCasePersonal";
+import PersonalEngagementlette from "./pages/Presonal/PersonalCreateEngagementletter";
+import CaseDetailPersonal from "./pages/Presonal/CreateNewCaseDetailsPersonal";
 
 
 const queryClient = new QueryClient();
@@ -47,120 +35,94 @@ const App = () => (
           <Route path="/set-password" element={<NewPasswordPage />} />
           <Route path="/success-popup" element={<SuccessPopuppage />} />
 
+
           {/* private routes */}
+        
           <Route
-            path="/attorney-management"
+            path="/case"
             element={
               <PrivateRoutes>
-                <AttorneyManagement />
+                <LegalProfile />
               </PrivateRoutes>
             }
           />
           <Route
-            path="/attorney-detail/:id"
+            path="/case/:id"
             element={
               <PrivateRoutes>
-                <AttorneyDetailPage />
+                <CaseDetail />
               </PrivateRoutes>
             }
           />
-          <Route
-            path="/attorney-case-detail/:attorneyId/:caseId"
+
+<Route
+            path="/personal-case/:id"
             element={
               <PrivateRoutes>
-                <CaseDetailPage />
-              </PrivateRoutes>
-            }
-          />
-          <Route
-            path="/content-management"
-            element={
-              <PrivateRoutes>
-                <ContentManagement />
+                <CaseDetailPersonal />
               </PrivateRoutes>
             }
           />
 
           <Route
-            path="/user-management"
+            path="/case/:id/create-engagement-letter"
             element={
               <PrivateRoutes>
-                <UserManagement />
+                <CreateEngagementLetter />
               </PrivateRoutes>
             }
           />
-          <Route
-            path="/user-management-form"
+
+<Route
+            path="/case/:id/upload"
             element={
               <PrivateRoutes>
-                <UserManagementForm />
+                <TemplateEditorPage />
               </PrivateRoutes>
             }
           />
+          
           <Route
-            path="/role-creation"
+            path="/case/:id/create-document"
             element={
               <PrivateRoutes>
-                <CreateRole />
+                <CreateDocument />
               </PrivateRoutes>
             }
           />
-          <Route
-            path="/report"
+         
+         <Route
+            path="/personal"
             element={
               <PrivateRoutes>
-                <ReportPage />
+                <PersonlaPage />
               </PrivateRoutes>
             }
           />
-          <Route
-            path="/clause-management"
+
+<Route
+            path="/personal/create-new-case"
             element={
               <PrivateRoutes>
-                <ClauseManagementPage />
-              </PrivateRoutes>
-            }
-          />
-          <Route
-            path="/approve-template"
-            element={
-              <PrivateRoutes>
-                <ApproveTemplatePage />
-              </PrivateRoutes>
-            }
-          />
-          <Route
-            path="/template-management"
-            element={
-              <PrivateRoutes>
-                <TemplateManagementPage />
-              </PrivateRoutes>
-            }
-          />
-          <Route
-            path="/template-management/:id"
-            element={
-              <PrivateRoutes>
-                <TemplateDetailPage />
-              </PrivateRoutes>
-            }
-          />
-          <Route
-            path="/template-management/create"
-            element={
-              <PrivateRoutes>
-                <CreateTemplatePage />
+                <CreateNewCasePersonal />
               </PrivateRoutes>
             }
           />
 
 
-            <Route path="/upload-template" element={<UploadTemplate />} />
-            <Route path="/template-editor" element={<TemplateEditorPage />} />
-            <Route path="/campaign-management" element={<CampaignManagement />} />
-            <Route path="/create-campaign" element={<CreateCampaign />} />
-            <Route path="/create-campaign/questionnaire" element={<CampaignQuestionnaire />} />
-         <Route path="*" element={<NotFound />} />
+
+<Route
+            path="/personal-case/:id/engagement-letter"
+            element={
+              <PrivateRoutes>
+                <PersonalEngagementlette />
+              </PrivateRoutes>
+            }
+          />
+
+
+
+            <Route path="*" element={<NotFound />} />
         
         
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

@@ -1,11 +1,10 @@
-
 import Layout from "@/components/Layout";
-import AttorneyTable from "@/components/AttorneyTable";
+import CaseList from "@/pages/Legal Assurance Plan/CaseList";
 
 const Index = () => {
   return (
     <Layout>
-      <AttorneyTable />
+      <CaseList />
     </Layout>
   );
 };

@@ -31,7 +31,7 @@ export const useLogin = (): UseMutationResult<
 
         description: data.message || "Welcome back! You are logged in.",
       });
-      navigate("/attorney-management");
+      navigate("/case");
     },
     onError: (error: any) => {
       const errorMessage =
