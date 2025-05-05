@@ -37,6 +37,8 @@ const CaseList = () => {
 
   return (
     <div className="bg-white rounded-lg shadow p-6">
+
+      
       <h2 className="text-xl font-semibold mb-4">Cases</h2>
       <div className="flex gap-2 mb-4">
         <button

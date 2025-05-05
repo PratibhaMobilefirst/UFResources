@@ -1,9 +1,9 @@
 import React, { useRef, useState, useEffect } from "react";
 import { ChevronLeft } from "lucide-react";
 import Sidebar from "@/components/Sidebar";
-import { SidebarProvider } from "@/components/ui/sidebar";
 import { useNavigate, useParams } from "react-router-dom";
 import { renderAsync } from "docx-preview";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 // Define CLAUSES and PLACEHOLDERS at the top
 const CLAUSES = [
@@ -29,6 +29,7 @@ interface DocumentEditorProps {
 
 const DocumentEditorPage = ({ onBack, initialFile }: DocumentEditorProps) => {
   const navigate = useRef(() => window.history.back());
+  
   const routerNavigate = useNavigate();
   const { id } = useParams();
   const [selectedClause, setSelectedClause] = useState(0);
@@ -65,7 +66,9 @@ const DocumentEditorPage = ({ onBack, initialFile }: DocumentEditorProps) => {
   }, [initialFile]);
 
   return (
-    <div className="flex min-h-screen w-full bg-[#f8f9fa]">
+   
+    
+      <div className="flex min-h-screen w-full bg-[#f8f9fa]">
       {/* Main Content */}
       <div className="flex flex-col flex-1 w-full">
         {/* Header */}
@@ -87,7 +90,7 @@ const DocumentEditorPage = ({ onBack, initialFile }: DocumentEditorProps) => {
             >
               Mark as Finished
             </button>
-            <button className="bg-blue-900 text-white px-4 py-2 rounded">Save as Draft</button>
+            <button className="bg-blue-900 text-white px-4 py-2 rounded" onClick={() => routerNavigate(`/case/${id}`)}>Save as Draft</button>
           </div>
         </div>
         {/* Content */}
@@ -129,8 +132,8 @@ const DocumentEditorPage = ({ onBack, initialFile }: DocumentEditorProps) => {
               <button className="w-8 h-8 rounded bg-white border text-gray-700 font-bold">I</button>
             </div>
             {/* Document Preview (scrollable) */}
-            <div className="bg-white rounded-lg shadow w-full max-w-2xl min-h-[400px] mb-6 overflow-y-auto" style={{ maxHeight: '400px' }}>
-              <h2 className="text-center text-xl font-bold mb-4">{docTitle}</h2>
+            <div className="bg-white rounded-lg shadow w-full max-w-2xl min-h-[400px] mb-20 overflow-y-auto" style={{ maxHeight: '400px' }}>
+              {/* <h2 className="text-center text-xl font-bold mb-4">{docTitle}</h2> */}
               {docContent !== null ? (
                 <p className="text-gray-700 text-base" style={{whiteSpace: 'pre-wrap'}}>
                   {docContent}
@@ -170,6 +173,8 @@ const DocumentEditorPage = ({ onBack, initialFile }: DocumentEditorProps) => {
         </div>
       </div>
     </div>
+ 
+   
   );
 };
 

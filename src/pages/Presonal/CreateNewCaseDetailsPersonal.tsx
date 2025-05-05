@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarContent, SidebarProvider } from "@/components/ui/sidebar";
 import Sidebar from "@/components/Sidebar";
 import CommonHeader from "../CommanHeader";
 
@@ -112,14 +112,21 @@ const documents = [
   { sno: "003", name: "Power of Attorney", updated: "1.2.2024", status: "Completed" },
 ];
 
-const CaseDetail = () => {
+const CaseDetailPersonal = () => {
+ 
   const { id } = useParams();
+
   const [active, setActive] = useState(true);
   const navigate = useNavigate();
   const [selectedState, setSelectedState] = useState("");
   const [selectedDocType, setSelectedDocType] = useState("");
   const caseInfo = cases.find((c) => c.id === id);
   const [showCreateDocModal, setShowCreateDocModal] = useState(false);
+
+  if (!id) {
+    navigate("/personal");
+    return null;
+  }
 
   // Find current index for pagination
   const currentIndex = cases.findIndex((c) => c.id === id);
@@ -141,60 +148,62 @@ const CaseDetail = () => {
     }
   };
 
-  // Empty state layout (if no caseInfo)
-  if (!caseInfo) {
-    return (
-      <SidebarProvider>
-        <div className="flex w-full  min-h-screen bg-mute">
-          <Sidebar />
-          <div className="bg-white flex-1 rounded-lg shadow p-6">
-            <div className="p-2">
-              <div className="text-2xl font-semibold mb-4">Document Assembly Service</div>
-            </div>
-            <div className="flex items-center justify-between mt-6 mb-6">
-              <div>
-                <h2 className="text-xl font-semibold mb-1 text-gray-700">Case Not Found</h2>
-                <div className="flex gap-8 text-sm text-gray-600">
-                  <div><span className="font-semibold">Case ID:</span> -</div>
-                  <div><span className="font-semibold">State:</span> -</div>
-                  <div><span className="font-semibold">Client Name:</span> -</div>
-                  <div><span className="font-semibold">Created Date:</span> -</div>
-                </div>
-              </div>
-            </div>
-            {/* Engagement Letter Section */}
-            <div className="mb-8">
-              <div className="flex items-center justify-between mb-2">
-                <h3 className="font-semibold text-lg">Engagement Letter</h3>
-                <div className="flex gap-2">
-                  <button className="bg-[#00426E] text-white px-4 py-2 rounded opacity-50 cursor-not-allowed" disabled>Create Engagement letter</button>
-                  <button className="bg-gray-200 text-gray-700 px-4 py-2 rounded opacity-50 cursor-not-allowed" disabled>Upload</button>
-                </div>
-              </div>
-              <div className="rounded border bg-gray-50 flex items-center justify-center h-24 text-gray-400">
-                Engagement Letter not created yet
-              </div>
-            </div>
-            {/* Document Section */}
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <h3 className="font-semibold text-lg">Document</h3>
-                <button className="bg-[#00426E] text-white px-4 py-2 rounded opacity-50 cursor-not-allowed" disabled>Create Document</button>
-              </div>
-              <div className="rounded border bg-gray-50 flex items-center justify-center h-24 text-gray-400">
-                Documents not created yet
-              </div>
-              <div className="flex justify-between items-center mt-6">
-                <button onClick={handlePrev} className="bg-gray-200 text-gray-700 px-5 py-2 rounded-lg font-medium">Previous</button>
-                <span className="text-base text-gray-500">No Case Data</span>
-                <button onClick={handleNext} className="bg-gray-200 text-gray-700 px-5 py-2 rounded-lg font-medium">Next</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </SidebarProvider>
-    );
-  }
+//   // Empty state layout (if no caseInfo)
+//   if (!caseInfo) {
+//     return (
+//     //   <SidebarProvider>
+//     //     <div className="flex w-full  min-h-screen bg-mute">
+//     //       <Sidebar />
+//     //       <div className="bg-white flex-1 rounded-lg shadow p-6">
+//     //         <div className="p-2">
+//     //           <div className="text-2xl font-semibold mb-4">Document Assembly Service</div>
+//     //         </div>
+//     //         <div className="flex items-center justify-between mt-6 mb-6">
+//     //           <div>
+//     //             <h2 className="text-xl font-semibold mb-1 text-gray-700">Case Not Found</h2>
+//     //             <div className="flex gap-8 text-sm text-gray-600">
+//     //               <div><span className="font-semibold">Case ID:</span> -</div>
+//     //               <div><span className="font-semibold">State:</span> -</div>
+//     //               <div><span className="font-semibold">Client Name:</span> -</div>
+//     //               <div><span className="font-semibold">Created Date:</span> -</div>
+//     //             </div>
+//     //           </div>
+//     //         </div>
+//     //         {/* Engagement Letter Section */}
+//     //         <div className="mb-8">
+//     //           <div className="flex items-center justify-between mb-2">
+//     //             <h3 className="font-semibold text-lg">Engagement Letter</h3>
+//     //             <div className="flex gap-2">
+//     //               <button className="bg-[#00426E] text-white px-4 py-2 rounded opacity-50 "    
+//     //               onClick={() => navigate(`/personal-case/${id}/engagement-letter`)}
+//     //               >Create Engagement letter</button>
+//     //               <button className="bg-gray-200 text-gray-700 px-4 py-2 rounded opacity-50" >Upload</button>
+//     //             </div>
+//     //           </div>
+//     //           <div className="rounded border bg-gray-50 flex items-center justify-center h-24 text-gray-400">
+//     //             Engagement Letter not created yet
+//     //           </div>
+//     //         </div>
+//     //         {/* Document Section */}
+//     //         <div>
+//     //           <div className="flex items-center justify-between mb-2">
+//     //             <h3 className="font-semibold text-lg">Document</h3>
+//     //             <button className="bg-[#00426E] text-white px-4 py-2 rounded opacity-50 " >Create Document</button>
+//     //           </div>
+//     //           <div className="rounded border bg-gray-50 flex items-center justify-center h-24 text-gray-400">
+//     //             Documents not created yet
+//     //           </div>
+//     //           <div className="flex justify-between items-center mt-6">
+//     //             <button onClick={handlePrev} className="bg-gray-200 text-gray-700 px-5 py-2 rounded-lg font-medium">Previous</button>
+//     //             <span className="text-base text-gray-500">No Case Data</span>
+//     //             <button onClick={handleNext} className="bg-gray-200 text-gray-700 px-5 py-2 rounded-lg font-medium">Next</button>
+//     //           </div>
+//     //         </div>
+//     //       </div>
+//     //     </div>
+//     //   </SidebarProvider>
+//     );
+//   }
 
   const showMultipleStates = Array.isArray(caseInfo.states) && caseInfo.states.length > 1;
   const stateOptions = caseInfo.states || (caseInfo.state ? [caseInfo.state] : []);
@@ -203,6 +212,7 @@ const CaseDetail = () => {
   return (
     <SidebarProvider>
       <>
+      <Sidebar/>
         <div className="flex min-h-screen  bg-mute">
           <Sidebar />
         </div>
@@ -239,7 +249,12 @@ const CaseDetail = () => {
             <div className="flex items-center justify-between mb-2">
               <h3 className="font-semibold text-lg">Engagement Letter</h3>
               <div className="flex gap-2">
-                <button className="bg-[#00426E] text-white px-4 py-2 rounded" onClick={() => navigate(`/case/${id}/create-engagement-letter`)}>Create Engagement letter</button>
+              <button
+                className="bg-[#00426E] text-white px-4 py-2 rounded hover:bg-[#005999] transition"
+                onClick={() => navigate(`/personal-case/${id}/engagement-letter`)}
+              >
+                Create Engagement letter
+              </button>
                 <button className="bg-gray-200 text-gray-700 px-4 py-2 rounded" onClick={() => navigate(`/case/${id}/upload`)}>Upload</button>
               </div>
             </div>
@@ -275,7 +290,7 @@ const CaseDetail = () => {
                       <td className="px-5 py-3">{doc.signing}</td>
                       <td className="px-5 py-3"><button className="text-[#00426E]">👁️</button></td>
                       <td className="px-5 py-3"><button className="text-[#00426E]">✏️</button></td>
-                      <td className="px-5 py-3"><button className="text-gray-400 cursor-not-allowed">⏬</button></td>
+                      <td className="px-5 py-3"><button className="text-gray-400 ">⏬</button></td>
                     </tr>
                   ))}
                 </tbody>
@@ -289,7 +304,8 @@ const CaseDetail = () => {
               <h3 className="font-semibold text-lg">Document</h3>
               <button
                 className="bg-[#00426E] text-white px-4 py-2 rounded"
-                onClick={() => navigate(`/case/${id}/create-document`)}
+                // onClick={() => navigate(`/case/${id}/create-document`)}
+                onClick={() => navigate(`/personal-case/${id}/engagement-letter`)}
               >
                 Create Document
               </button>
@@ -338,4 +354,5 @@ const CaseDetail = () => {
   );
 };
 
-export default CaseDetail; 
+export default CaseDetailPersonal; 
+

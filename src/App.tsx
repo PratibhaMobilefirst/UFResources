@@ -13,6 +13,11 @@ import CaseDetail from "./pages/Legal Assurance Plan/CaseDetail";
 import LegalProfile from "./pages/LegalProfile";
 import CreateEngagementLetter from "./pages/Legal Assurance Plan/CreateEngagementLetter";
 import TemplateEditorPage from "./pages/Upload Template/TemplateEditorPagr";
+import CreateDocument from "./pages/Legal Assurance Plan/CreateDocument";
+import PersonlaPage from "./pages/Presonal/PersonlaPage";
+import CreateNewCasePersonal from "./pages/Presonal/CreateNewCasePersonal";
+import PersonalEngagementlette from "./pages/Presonal/PersonalCreateEngagementletter";
+import CaseDetailPersonal from "./pages/Presonal/CreateNewCaseDetailsPersonal";
 
 
 const queryClient = new QueryClient();
@@ -49,6 +54,16 @@ const App = () => (
               </PrivateRoutes>
             }
           />
+
+<Route
+            path="/personal-case/:id"
+            element={
+              <PrivateRoutes>
+                <CaseDetailPersonal />
+              </PrivateRoutes>
+            }
+          />
+
           <Route
             path="/case/:id/create-engagement-letter"
             element={
@@ -66,6 +81,47 @@ const App = () => (
               </PrivateRoutes>
             }
           />
+          
+          <Route
+            path="/case/:id/create-document"
+            element={
+              <PrivateRoutes>
+                <CreateDocument />
+              </PrivateRoutes>
+            }
+          />
+         
+         <Route
+            path="/personal"
+            element={
+              <PrivateRoutes>
+                <PersonlaPage />
+              </PrivateRoutes>
+            }
+          />
+
+<Route
+            path="/personal/create-new-case"
+            element={
+              <PrivateRoutes>
+                <CreateNewCasePersonal />
+              </PrivateRoutes>
+            }
+          />
+
+
+
+<Route
+            path="/personal-case/:id/engagement-letter"
+            element={
+              <PrivateRoutes>
+                <PersonalEngagementlette />
+              </PrivateRoutes>
+            }
+          />
+
+
+
             <Route path="*" element={<NotFound />} />
         
         
