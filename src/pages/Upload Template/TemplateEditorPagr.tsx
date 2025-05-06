@@ -25,7 +25,7 @@ const TemplateEditorPage = () => {
   return (
     <SidebarProvider>
       <div className="flex min-h-screen w-full bg-gray-50">
-        <Sidebar />
+        {/* <Sidebar /> */}
         <div className="flex-1">
           <input
             ref={fileInputRef}

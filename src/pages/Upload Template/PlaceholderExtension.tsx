@@ -2,6 +2,7 @@ import { Node, mergeAttributes } from '@tiptap/core';
 import { ReactNodeViewRenderer } from '@tiptap/react';
 import React, { useState, useEffect } from 'react';
 import { Check, X, Eye, Trash2 } from 'lucide-react';
+import { EditorContent } from '@tiptap/react';
 
 interface PlaceholderProps {
   node: any;
@@ -92,7 +93,13 @@ const PlaceholderComponent: React.FC<PlaceholderProps> = (props) => {
               autoFocus
             />
             <button
-              onClick={handleSave}
+              onClick={() => {
+                if (value.trim() && props.node) {
+                  props.updateAttributes({ value });
+                  setShowInput(false);
+                  window.dispatchEvent(new CustomEvent('placeholderValueChange', { detail: value }));
+                }
+              }}
               className="p-1 hover:bg-green-50 rounded-full"
             >
               <Check className="w-4 h-4 text-green-600" />
