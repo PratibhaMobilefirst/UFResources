@@ -146,7 +146,7 @@ const CaseDetail = () => {
     return (
       <SidebarProvider>
         <div className="flex w-full  min-h-screen bg-mute">
-          <Sidebar />
+        
           <div className="bg-white flex-1 rounded-lg shadow p-6">
             <div className="p-2">
               <div className="text-2xl font-semibold mb-4">Document Assembly Service</div>
