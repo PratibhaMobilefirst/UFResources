@@ -48,6 +48,8 @@ import Image from '@tiptap/extension-image';
 
 import PlaceholderExtension from './PlaceholderExtension'; // your custom extension
 
+import html2canvas from 'html2canvas'; // Add this import
+
 
 
 // Define CLAUSES and PLACEHOLDERS at the top
@@ -126,7 +128,7 @@ const DocumentEditorPage = ({ onBack, initialFile }: DocumentEditorProps) => {
 
   const docxContainerRef = useRef<HTMLDivElement>(null);
 
-  const [activeTool, setActiveTool] = useState<string | null>(null);
+  const [activeTool, setActiveTool] = useState('');
 
   const [showInputBox, setShowInputBox] = useState(false);
 
@@ -148,7 +150,15 @@ const DocumentEditorPage = ({ onBack, initialFile }: DocumentEditorProps) => {
 
   const [insertedImages, setInsertedImages] = useState<{ id: string; src: string }[]>([]);
 
+  const [pageThumbnails, setPageThumbnails] = useState<string[]>([]);
 
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const [totalPages, setTotalPages] = useState(0);
+
+  const [visiblePages, setVisiblePages] = useState(4); // Number of thumbnails visible at once
+  const [currentStartIndex, setCurrentStartIndex] = useState(0); // Start index for visible thumbnails
+  const thumbnailContainerRef = useRef(null);
 
   const editor = useEditor({
 
@@ -195,6 +205,9 @@ const DocumentEditorPage = ({ onBack, initialFile }: DocumentEditorProps) => {
             });
 
             setDocContent(null); // We use the rendered HTML
+            
+            // Generate thumbnails after document is rendered
+            generatePageThumbnails();
 
           }
 
@@ -266,181 +279,19 @@ const DocumentEditorPage = ({ onBack, initialFile }: DocumentEditorProps) => {
 
 
 
-  // Add cursor position handler
+ 
 
-  const handleCursorPosition = () => {
+  // Function to handle the scroll event and increase thumbnail size after scrolling
+  const handleScroll = () => {
+    const container = thumbnailContainerRef.current;
+    const isAtEnd = container.scrollWidth - container.scrollLeft === container.clientWidth;
 
-    const selection = window.getSelection();
-
-    if (!selection || !selection.rangeCount) return;
-
-
-
-    const range = selection.getRangeAt(0);
-
-    const node = range.startContainer;
-
-
-
-    // Check if cursor is in an image
-
-    const isInImage = node.nodeType === Node.ELEMENT_NODE && 
-
-      (node as Element).tagName === 'IMG' || 
-
-      (node as Element).closest('img');
-
-
-
-    // Check if cursor is in a placeholder
-
-    const isInPlaceholder = node.nodeType === Node.ELEMENT_NODE && 
-
-      (node as Element).classList.contains('placeholder');
-
-
-
-    if (isInImage) {
-
-      setActiveTool('image');
-
-    } else if (isInPlaceholder) {
-
-      setActiveTool('list');
-
-    } else {
-
-      setActiveTool('text');
-
+    if (isAtEnd) {
+      setVisiblePages((prev) => prev + 4); // Add next 4 pages as you scroll
     }
-
   };
 
-
-
-  // Add event listeners for cursor position
-
-  useEffect(() => {
-
-    const docContainer = docxContainerRef.current;
-
-    if (!docContainer) return;
-
-
-
-    const handleMouseUp = () => {
-
-      handleCursorPosition();
-
-    };
-
-
-
-    const handleKeyUp = () => {
-
-      handleCursorPosition();
-
-    };
-
-
-
-    docContainer.addEventListener('mouseup', handleMouseUp);
-
-    docContainer.addEventListener('keyup', handleKeyUp);
-
-
-
-    return () => {
-
-      docContainer.removeEventListener('mouseup', handleMouseUp);
-
-      docContainer.removeEventListener('keyup', handleKeyUp);
-
-    };
-
-  }, []);
-
-
-
-  // Modify image upload handler
-
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-
-    const file = event.target.files?.[0];
-
-    if (!file) return;
-
-
-
-    const reader = new FileReader();
-
-    reader.onload = (e) => {
-
-      const imageUrl = e.target?.result as string;
-
-      const imageId = `img-${Date.now()}`;
-      
-      setInsertedImages(prev => [...prev, {
-
-        id: imageId,
-
-        src: imageUrl
-
-      }]);
-
-
-
-      if (docxContainerRef.current) {
-
-        const img = document.createElement('img');
-
-        img.src = imageUrl;
-
-        img.className = 'inserted-image max-w-full h-auto my-4';
-
-        img.id = imageId;
-        
-        const selection = window.getSelection();
-
-        if (selection && selection.rangeCount > 0) {
-
-          const range = selection.getRangeAt(0);
-
-          range.insertNode(img);
-
-          const br = document.createElement('br');
-
-          range.insertNode(br);
-
-          setActiveTool('image'); // Set active tool to image after insertion
-
-        } else {
-
-          docxContainerRef.current.appendChild(img);
-
-          docxContainerRef.current.appendChild(document.createElement('br'));
-
-          setActiveTool('image'); // Set active tool to image after insertion
-
-        }
-
-      }
-
-
-
-      setIsImageUploading(false);
-
-    };
-
-
-
-    reader.readAsDataURL(file);
-
-  };
-
-
-
-  // Modify placeholder insertion
+  // Helper to get cursor position in the editor
 
   const showInputAtCursor = () => {
 
@@ -456,6 +307,8 @@ const DocumentEditorPage = ({ onBack, initialFile }: DocumentEditorProps) => {
 
     const rect = range.getBoundingClientRect();
 
+    // Fallback to center if rect is empty
+
     const x = rect.left || window.innerWidth / 2;
 
     const y = rect.bottom || window.innerHeight / 2;
@@ -467,8 +320,6 @@ const DocumentEditorPage = ({ onBack, initialFile }: DocumentEditorProps) => {
     setShowInputBox(true);
 
     setInputBoxValue('');
-
-    setActiveTool('list'); // Set active tool to list when showing placeholder input
 
     setTimeout(() => {
 
@@ -502,6 +353,99 @@ const DocumentEditorPage = ({ onBack, initialFile }: DocumentEditorProps) => {
 
     }, 0);
 
+  };
+
+
+
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+
+    const file = event.target.files?.[0];
+
+    if (!file) return;
+
+
+
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+
+      const imageUrl = e.target?.result as string;
+
+      const imageId = `img-${Date.now()}`;
+      
+      // Add the image to our state
+      setInsertedImages(prev => [...prev, {
+        id: imageId,
+        src: imageUrl
+      }]);
+
+      // Create and insert the image element
+      if (docxContainerRef.current) {
+        const img = document.createElement('img');
+        img.src = imageUrl;
+        img.className = 'inserted-image max-w-full h-auto my-4';
+        img.id = imageId;
+        
+        // Insert at cursor position or at the end
+        const selection = window.getSelection();
+        if (selection && selection.rangeCount > 0) {
+          const range = selection.getRangeAt(0);
+          range.insertNode(img);
+          // Add a line break after the image
+          const br = document.createElement('br');
+          range.insertNode(br);
+        } else {
+          docxContainerRef.current.appendChild(img);
+          docxContainerRef.current.appendChild(document.createElement('br'));
+        }
+      }
+
+      setIsImageUploading(false);
+
+    };
+
+    reader.readAsDataURL(file);
+
+  };
+
+
+
+  // Add function to generate thumbnails
+  const generatePageThumbnails = async () => {
+    if (!docxContainerRef.current) return;
+
+    const pages = docxContainerRef.current.querySelectorAll('.docx-preview');
+    setTotalPages(pages.length);
+    
+    const thumbnails: string[] = [];
+    
+    for (let i = 0; i < pages.length; i++) {
+      const page = pages[i] as HTMLElement;
+      try {
+        const canvas = await html2canvas(page, {
+          scale: 0.2, // Scale down for thumbnail
+          useCORS: true,
+          logging: false,
+        });
+        thumbnails.push(canvas.toDataURL('image/png'));
+      } catch (error) {
+        console.error('Error generating thumbnail:', error);
+      }
+    }
+    
+    setPageThumbnails(thumbnails);
+  };
+
+  // Add function to jump to specific page
+  const jumpToPage = (pageNumber: number) => {
+    if (!docxContainerRef.current) return;
+    
+    const pages = docxContainerRef.current.querySelectorAll('.docx-preview');
+    if (pageNumber >= 1 && pageNumber <= pages.length) {
+      const targetPage = pages[pageNumber - 1] as HTMLElement;
+      targetPage.scrollIntoView({ behavior: 'smooth' });
+      setCurrentPage(pageNumber);
+    }
   };
 
 
@@ -638,11 +582,11 @@ const DocumentEditorPage = ({ onBack, initialFile }: DocumentEditorProps) => {
 
           {/* Main Editor */}
 
-          <div className="flex-1 flex flex-col items-center justify-center bg-[#f8f9fa] p-8 relative" style={{ minWidth: 0 }}>
+          <div className="flex-1 flex flex-col items-center bg-[#f8f9fa] relative" style={{ minWidth: 0 }}>
 
             {/* Toolbar */}
 
-            <div className="flex gap-4 mb-4 bg-white p-2 rounded-lg shadow-sm">
+            <div className="flex gap-4 mb-4 mt-2 bg-white p-2 rounded-lg shadow-sm">
 
               {TOOLBAR_OPTIONS.map((tool) => (
 
@@ -661,6 +605,8 @@ const DocumentEditorPage = ({ onBack, initialFile }: DocumentEditorProps) => {
                   }`}
 
                   onClick={async () => {
+
+                    setActiveTool(tool.key);
 
                     if (tool.key === 'list' && editor) {
 
@@ -968,42 +914,94 @@ const DocumentEditorPage = ({ onBack, initialFile }: DocumentEditorProps) => {
 
             {/* Document Preview (scrollable) */}
 
-            <div 
-              className="bg-white rounded-lg shadow w-full max-w-2xl min-h-[400px] mb-20 overflow-y-auto p-4" 
-              style={{ maxHeight: '400px' }}
+            
+
+            {/* <div 
+  className="bg-white rounded-lg shadow w-full max-w-2xl min-h-[350px] overflow-y-auto overflow-x-hidden scrollbar-hide" 
+  style={{ maxHeight: '350px' }}
+
+
               ref={docxContainerRef}
               contentEditable={true}
-              onFocus={() => setActiveTool('text')}
             >
-              {docContent !== null ? (
-                <div className="text-gray-700 text-base" style={{whiteSpace: 'pre-wrap'}}>
+                {docContent !== null ? (
+                <div className="text-gray-700 bg-red-500 text-base " style={{whiteSpace: 'pre-wrap'}}>
                   {docContent}
                 </div>
               ) : (
                 <div className="docx-preview text-gray-700 text-base" />
               )}
-            </div>
+            
+            </div> */}
+<div 
+  className="bg-white rounded-lg shadow mx-auto max-w-2xl min-h-[0px] overflow-y-auto overflow-x-hidden scrollbar-hide p-8 flex flex-col items-center justify-center"
+  style={{ maxHeight: '350px' }}
+  ref={docxContainerRef}
+  contentEditable={true}
+  tabIndex={0}
+  onFocus={() => setActiveTool('text')}
+>
+  {docContent !== null ? (
+    <div 
+      className="text-gray-700 text-base break-words whitespace-pre-wrap w-full" 
+    >
+      {docContent}
+    </div>
+  ) : (
+    <div className="docx-preview text-gray-700 text-base w-full" />
+  )}
+</div>
 
-            {/* Page Thumbnails (fixed to bottom of main editor area) */}
-
-            <div className="flex gap-2 mt-2 absolute left-0 right-0 bottom-4 justify-center">
-
-              {[1, 2, 3, 4, 5].map((n) => (
-
-                <div
-
-                  key={n}
-
-                  className="w-16 h-20 bg-white border rounded flex items-center justify-center text-gray-500 text-xs shadow"
-
-                >
-
-                  {n}
-
-                </div>
-
-              ))}
-
+            {/* Page Thumbnails */}
+            <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 flex items-center bg-white p-2 rounded-lg shadow-lg">
+              {/* Left Arrow */}
+              <button
+                className="w-6 h-20 flex items-center justify-center text-gray-400 hover:text-blue-700 disabled:opacity-30"
+                onClick={() => setCurrentStartIndex(i => Math.max(i - visiblePages, 0))}
+                disabled={currentStartIndex === 0}
+                aria-label="Scroll left"
+              >
+                <ChevronLeft />
+              </button>
+              {/* Thumbnails */}
+              <div
+                className="flex gap-2 overflow-x-hidden"
+                style={{ width: 120 * visiblePages + 8 * (visiblePages - 1) }} // 4 thumbnails + 3 gaps
+              >
+                {pageThumbnails
+                  .slice(currentStartIndex, currentStartIndex + visiblePages)
+                  .map((thumbnail, index) => (
+                    <div
+                      key={currentStartIndex + index}
+                      className={`w-36 h-20 bg-white border rounded cursor-pointer transition-all relative ${
+                        currentPage === currentStartIndex + index + 1 ? 'ring-2 ring-blue-500' : ''
+                      }`}
+                      onClick={() => jumpToPage(currentStartIndex + index + 1)}
+                    >
+                      <img
+                        src={thumbnail}
+                        alt={`Page ${currentStartIndex + index + 1}`}
+                        className="w-full h-full object-cover rounded"
+                      />
+                      <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-xs text-center py-0.5">
+                        {currentStartIndex + index + 1}
+                      </div>
+                    </div>
+                  ))}
+              </div>
+              {/* Right Arrow */}
+              <button
+                className="w-6 h-20 flex items-center justify-center text-gray-400 hover:text-blue-700 disabled:opacity-30"
+                onClick={() =>
+                  setCurrentStartIndex(i =>
+                    Math.min(i + visiblePages, Math.max(pageThumbnails.length - visiblePages, 0))
+                  )
+                }
+                disabled={currentStartIndex + visiblePages >= pageThumbnails.length}
+                aria-label="Scroll right"
+              >
+                <ChevronLeft className="rotate-180" />
+              </button>
             </div>
 
           </div>
@@ -1082,21 +1080,7 @@ const DocumentEditorPage = ({ onBack, initialFile }: DocumentEditorProps) => {
 
                 </div>
 
-                <button
-
-                  className="bg-blue-900 text-white px-4 py-1 rounded text-sm"
-
-                  onClick={() => {
-
-                    // Save is handled by the input's onChange above, but you can add extra logic if needed
-
-                  }}
-
-                >
-
-                  Save
-
-                </button>
+                
 
               </div>
 

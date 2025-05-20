@@ -72,7 +72,7 @@ const CreateDocument = () => {
   return (
     <div className="flex h-screen bg-gray-100">
       <SidebarProvider>
-        <Sidebar />
+        <Sidebar />  
         <div className="w-full min-h-screen flex-1 flex-col">
           <header className="bg-white py-3 px-4 border-b flex justify-end gap-2"></header>
           <main className="flex-1 p-6 overflow-auto">
