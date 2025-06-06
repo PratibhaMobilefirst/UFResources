@@ -24,6 +24,8 @@ import TemplateManagementPage from "./pages/TemplateManagement/TemplateManagemen
 import TemplateDetailPage from "./pages/TemplateManagement/TemplateDetailPage";
 import CreateTemplatePage from "./pages/TemplateManagement/CreateTemplatePage";
 import ClauseManagementPage from "./pages/Clause Management/ClauseManagementPage";
+import LegacyAssurancePlanPage from "./pages/LegacyAssurancePlan/LegacyAssurancePlan";
+import { LegacyAssuranceDetail } from "./pages/LegacyAssurancePlan/LegacyAssuranceDetail";
 
 const queryClient = new QueryClient();
 
@@ -39,8 +41,20 @@ const App = () => (
           <Route path="/set-password" element={<NewPasswordPage />} />
           <Route path="/success-popup" element={<SuccessPopuppage />} />
           <Route path="/attorney-management" element={<AttorneyManagement />} />
+
+          <Route
+            path="/legacy-assurance-plan"
+            element={<LegacyAssurancePlanPage />}
+          />
+          <Route
+            path="/legacy-assurance-plan-detail/:id"
+            element={<LegacyAssuranceDetail />}
+          />
           <Route path="/attorney-detail/:id" element={<AttorneyDetailPage />} />
-          <Route path="/attorney-case-detail/:attorneyId/:caseId" element={<CaseDetailPage />} />
+          <Route
+            path="/attorney-case-detail/:attorneyId/:caseId"
+            element={<CaseDetailPage />}
+          />
           <Route path="/content-management" element={<ContentManagement />} />
           {/* <Route path="/user-management" element={<UserManagement />} /> */}
           <Route path="/user-management" element={<LoginFormPage />} />
@@ -50,13 +64,22 @@ const App = () => (
           />
           <Route path="/role-creation" element={<CreateRole />} />
           <Route path="/report" element={<ReportPage />} />
-<Route path="/clause-management" element={<ClauseManagementPage />} />
+          <Route path="/clause-management" element={<ClauseManagementPage />} />
           {/* <Route path="/role-creation" element={<RoleCreationPage />} /> */}
           {/* <Route path="/role-creation" element={<RoleCreationPage />} /> */}
           <Route path="/approve-template" element={<ApproveTemplatePage />} />
-          <Route path="/template-management" element={<TemplateManagementPage />} />
-          <Route path="/template-management/:id" element={<TemplateDetailPage />} />
-          <Route path="/template-management/create" element={<CreateTemplatePage />} />
+          <Route
+            path="/template-management"
+            element={<TemplateManagementPage />}
+          />
+          <Route
+            path="/template-management/:id"
+            element={<TemplateDetailPage />}
+          />
+          <Route
+            path="/template-management/create"
+            element={<CreateTemplatePage />}
+          />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

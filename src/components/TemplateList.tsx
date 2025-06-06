@@ -1,110 +1,112 @@
-
-import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
+// import { TemplateCard } from "@/api/templateCardApi";
+import { Skeleton } from "@/components/ui/skeleton";
+import BookLogo from "/lovable-uploads/Book_logo.svg";
 
-// Mock data for templates
-const templateData = [
-  {
-    id: "1",
-    name: "Engagement Letter",
-    category: "Will",
-    icon: "file",
-    backgroundColor: "#E7F5FF",
-  },
-  {
-    id: "2",
-    name: "Simplified Estate Plan",
-    category: "Will",
-    icon: "file",
-    backgroundColor: "#E7F5FF",
-  },
-  {
-    id: "3",
-    name: "Simple Revocable Trust",
-    category: "Trust",
-    icon: "file",
-    backgroundColor: "#E7F5FF",
-  },
-  {
-    id: "4",
-    name: "Service Agreement",
-    category: "Agreement",
-    icon: "file",
-    backgroundColor: "#E7F5FF",
-  },
-  {
-    id: "5",
-    name: "Simple Lease Agreement",
-    category: "Real Estate",
-    icon: "file",
-    backgroundColor: "#E7F5FF",
-  },
-  {
-    id: "6",
-    name: "Power of Attorney",
-    category: "Will",
-    icon: "file",
-    backgroundColor: "#E7F5FF",
-  },
-  {
-    id: "7",
-    name: "Deed of Trust",
-    category: "Trust",
-    icon: "file",
-    backgroundColor: "#E7F5FF",
-  },
-  {
-    id: "8",
-    name: "Property Transfer Deed",
-    category: "Will",
-    icon: "file",
-    backgroundColor: "#E7F5FF",
-  },
-];
+interface TemplateListProps {
+  templates?: TemplateCard[];
+  isLoading: boolean;
+  isError: boolean;
+}
 
-const TemplateList = () => {
+const TemplateList = ({
+  templates = [],
+  isLoading,
+  isError,
+}: TemplateListProps) => {
   const navigate = useNavigate();
-
-  const handleTemplateClick = (id: string) => {
-    navigate(`/template-management/${id}`);
+  const handleTemplateClick = (id: string, templateData: any) => {
+    navigate(`/legacy-assurance-plan-detail/${id}`, {
+      state: { template: templateData, id: id },
+    });
   };
 
+  if (isLoading) {
+    return (
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-6 justify-items-center">
+        {Array(8)
+          .fill(0)
+          .map((_, index) => (
+            <div key={index} className="cursor-pointer">
+              <div className="rounded-md flex flex-col items-center shadow-sm overflow-hidden w-[250px] h-[250px] border border-[#D9D8D8]">
+                <div className="bg-[#E7F5FF] p-6 w-full flex justify-center items-center h-[150px]">
+                  <Skeleton className="h-16 w-16 rounded" />
+                </div>
+                <div className="bg-white p-4 w-full h-[100px] flex flex-col">
+                  <div className="text-left h-full flex flex-col justify-between">
+                    <div>
+                      <Skeleton className="h-5 w-16 mb-2 rounded-full" />
+                      <Skeleton className="h-6 w-32" />
+                    </div>
+                    <div className="h-4"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="flex justify-center items-center p-8 text-red-500">
+        Error loading templates. Please try again later.
+      </div>
+    );
+  }
+
+  if (templates.length === 0) {
+    return (
+      <div className="flex justify-center items-center p-8 text-gray-500">
+        No Data Found
+      </div>
+    );
+  }
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      {templateData.map((template) => (
+    <div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-6 justify-items-center">
+      {templates.map((template) => (
         <div
           key={template.id}
           className="cursor-pointer"
-          onClick={() => handleTemplateClick(template.id)}
+          onClick={() => handleTemplateClick(template, template.id)}
         >
-          <div
-            className="p-6 rounded-md flex flex-col items-center bg-[#E7F5FF] hover:bg-[#D0EBFF] transition-colors"
-          >
-            <div className="mb-4">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="40"
-                height="40"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#00426E"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
-                <polyline points="14 2 14 8 20 8" />
-                <line x1="16" y1="13" x2="8" y2="13" />
-                <line x1="16" y1="17" x2="8" y2="17" />
-                <line x1="10" y1="9" x2="8" y2="9" />
-              </svg>
+          <div className="rounded-md flex flex-col items-center shadow-sm overflow-hidden w-[250px] h-[250px] border border-[#D9D8D8]">
+            <div className="bg-[#E7F5FF] p-6 w-full flex justify-center items-center h-[150px]">
+              <img src={BookLogo} alt="Document" className="w-16 h-16" />
             </div>
-            {template.category && (
-              <Badge variant="outline" className="mb-2 border-[#00426E] text-[#00426E]">
-                {template.category}
-              </Badge>
-            )}
-            <h3 className="text-center font-medium">{template.name}</h3>
+            <div className="bg-white p-4 w-full h-[100px] flex flex-col">
+              <div className="text-left h-full flex flex-col justify-between">
+                <div>
+                  <div className="flex flex-wrap gap-1 mb-2">
+                    {template.categories && template.categories.length > 0
+                      ? template.categories.map(
+                          (categoryItem: any, index: number) => (
+                            <span
+                              key={index}
+                              className="inline-block px-2 py-1 text-xs font-medium rounded-full bg-[#D4EDFF] text-[#00426E]"
+                            >
+                              {categoryItem.category.templateName}
+                            </span>
+                          )
+                        )
+                      : null}
+                  </div>
+                  <h3
+                    className={`font-semibold text-black text-[18px] ${
+                      !template.categories || template.categories.length === 0
+                        ? "line-clamp-2"
+                        : "line-clamp-1"
+                    }`}
+                    title={template.templateCardName}
+                  >
+                    {template.templateCardName}
+                  </h3>
+                </div>
+                <div className="h-4"></div>
+              </div>
+            </div>
           </div>
         </div>
       ))}
