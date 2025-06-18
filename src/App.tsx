@@ -26,6 +26,8 @@ import CreateTemplatePage from "./pages/TemplateManagement/CreateTemplatePage";
 import ClauseManagementPage from "./pages/Clause Management/ClauseManagementPage";
 import LegacyAssurancePlanPage from "./pages/LegacyAssurancePlan/LegacyAssurancePlan";
 import { LegacyAssuranceDetail } from "./pages/LegacyAssurancePlan/LegacyAssuranceDetail";
+import CreateEngagementLetter from "./pages/LegacyAssurancePlan/CreateEngagementLetter";
+import CreateDocument from "./pages/LegacyAssurancePlan/CreateDocument";
 
 const queryClient = new QueryClient();
 
@@ -46,6 +48,11 @@ const App = () => (
             path="/legacy-assurance-plan"
             element={<LegacyAssurancePlanPage />}
           />
+          <Route
+            path="/create-engagement-letter"
+            element={<CreateEngagementLetter />}
+          />
+          <Route path="/create-document" element={<CreateDocument />} />
           <Route
             path="/legacy-assurance-plan-detail/:id"
             element={<LegacyAssuranceDetail />}

@@ -18,6 +18,7 @@ export const usePrivateCases = (params: PrivateCasesParams) => {
 interface UseCaseDetailsParams {
   caseId: string;
   attorneyId: string;
+  isActive?: boolean;
 }
 
 export const useCaseDetails = ({
