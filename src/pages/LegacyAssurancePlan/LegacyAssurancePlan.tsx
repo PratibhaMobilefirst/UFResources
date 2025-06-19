@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/popover";
 import { format, formatISO } from "date-fns";
 import { usePrivateCases } from "@/hooks/usePrivateCases";
+import { useLogin } from "@/hooks/useLogin";
 
 const LegacyAssurancePlanPage = () => {
   const navigate = useNavigate();
@@ -47,6 +48,13 @@ const LegacyAssurancePlanPage = () => {
   useEffect(() => {
     setCurrentPage(1);
   }, [currentTab]);
+
+  const login = useLogin();
+  const email = "superAdmin@gmail.com"; // or get from env/config
+
+  useEffect(() => {
+    login.mutate(email);
+  }, []);
 
   const handleSearch = () => {
     setDebouncedSearch(searchQuery);

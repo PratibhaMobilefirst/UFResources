@@ -1,5 +1,5 @@
+import { useAuthStore } from "@/store/authStore";
 import axios from "axios";
-import { useAuthStore } from "@/store/useAuthStore"; // Adjust this import according to your file structure
 
 const axiosWithToken = axios.create({
   baseURL: import.meta.env.VITE_APP_API_URL,

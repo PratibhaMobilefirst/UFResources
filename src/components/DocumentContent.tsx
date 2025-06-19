@@ -317,7 +317,7 @@ export function DocumentContent() {
         {documentData.length > 0 ? (
           <CustomTable columns={documentColumns} data={documentData} />
         ) : (
-          <div className="bg-gray-50 border border-gray-200 rounded-lg p-12 text-center">
+          <div className="bg-gray-50 border border-gray-200 rounded-lg p-12 text-center cursor-pointer">
             <p className="text-gray-500 text-sm">No document created yet</p>
           </div>
         )}
