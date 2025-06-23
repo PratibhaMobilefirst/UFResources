@@ -39,7 +39,7 @@ export interface PrivateCasesResponse {
 export const getPrivateCases = async (
   params: PrivateCasesParams
 ): Promise<PrivateCasesResponse> => {
-  const response = await axiosInstance.get("private-attorney/private-cases", {
+  const response = await axiosInstance.get("network-attorney/cases", {
     params,
   });
   return response.data.data;
@@ -51,14 +51,11 @@ interface CaseDetails {
 }
 
 export const getCaseDetails = async ({ caseId, attorneyId }: CaseDetails) => {
-  const response = await axiosInstance.get(
-    `/private-attorney/private-case-details`,
-    {
-      params: {
-        attorneyId: attorneyId,
-        caseId: caseId,
-      },
-    }
-  );
+  const response = await axiosInstance.get(`/network-attorney/case-details`, {
+    params: {
+      attorneyId: attorneyId,
+      caseId: caseId,
+    },
+  });
   return response.data;
 };

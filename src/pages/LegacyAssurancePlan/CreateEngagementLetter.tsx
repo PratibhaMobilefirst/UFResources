@@ -18,7 +18,7 @@ const CreateEngagementLetter = () => {
   const [selectedState, setSelectedState] = useState("");
   const [selectedDocumentType, setSelectedDocumentType] = useState("");
   const navigate = useNavigate();
-  const { data: statesData } = useActiveStates(1, 50);
+  // const { data: statesData } = useActiveStates(1, 50);
   console.log(statesData, "statesData");
 
   const documentTypes = [
