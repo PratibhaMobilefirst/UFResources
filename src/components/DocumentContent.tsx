@@ -18,6 +18,9 @@ import { useState } from "react";
 interface DocumentContentProps {
   data: any;
   showEngagementLetter?: boolean;
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
   handleNavigateEngagementLetter?: () => void;
   handleNavigateDocument?: () => void;
 }
@@ -25,6 +28,9 @@ interface DocumentContentProps {
 export function DocumentContent({
   data,
   showEngagementLetter,
+  currentPage,
+  totalPages,
+  onPageChange,
   handleNavigateEngagementLetter,
   handleNavigateDocument,
 }: DocumentContentProps) {
@@ -218,31 +224,40 @@ export function DocumentContent({
           </div>
         )}
       </div>
+      {/* Pagination */}
 
-      <Pagination>
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink className="cursor-pointer">1</PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationEllipsis />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink>2</PaginationLink>
-          </PaginationItem>
-          {Array.from({ length: 5 }, (_, i) => i + 1).map((page) => (
-            <PaginationItem key={page}>
-              <PaginationLink>{page}</PaginationLink>
+      {totalPages > 1 && (
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                disabled={currentPage === 1}
+                onClick={() => onPageChange(currentPage - 1)}
+              />
             </PaginationItem>
-          ))}
-          <PaginationItem>
-            <PaginationNext />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
+            {[...Array(totalPages)].map((_, index) => (
+              <PaginationItem key={index}>
+                <PaginationLink
+                  className={
+                    currentPage === index + 1
+                      ? "cursor-pointer active"
+                      : "cursor-pointer"
+                  }
+                  onClick={() => onPageChange(index + 1)}
+                >
+                  {index + 1}
+                </PaginationLink>
+              </PaginationItem>
+            ))}
+            <PaginationItem>
+              <PaginationNext
+                disabled={currentPage === totalPages}
+                onClick={() => onPageChange(currentPage + 1)}
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      )}
     </div>
   );
 }

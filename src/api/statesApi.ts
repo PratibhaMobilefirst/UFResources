@@ -1,4 +1,3 @@
-import axiosInstance from "./axiosInstance";
 import axiosWithToken from "./axiosWithToken";
 
 export interface AttorneyState {
