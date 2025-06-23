@@ -28,6 +28,9 @@ import LegacyAssurancePlanPage from "./pages/LegacyAssurancePlan/LegacyAssurance
 import { LegacyAssuranceDetail } from "./pages/LegacyAssurancePlan/LegacyAssuranceDetail";
 import CreateEngagementLetter from "./pages/LegacyAssurancePlan/CreateEngagementLetter";
 import CreateDocument from "./pages/LegacyAssurancePlan/CreateDocument";
+import PersonalPage from "./pages/Personal/PersonalPage";
+import { PersonalDetailPage } from "./pages/Personal/PersonalDetailPage";
+import CreateCase from "./pages/Personal/CreateCase";
 
 const queryClient = new QueryClient();
 
@@ -57,6 +60,10 @@ const App = () => (
             path="/legacy-assurance-plan-detail/:id"
             element={<LegacyAssuranceDetail />}
           />
+          <Route path="/personal" element={<PersonalPage />} />
+          <Route path="/create-case" element={<CreateCase />} />
+          <Route path="/personal-detail/:id" element={<PersonalDetailPage />} />
+
           <Route path="/attorney-detail/:id" element={<AttorneyDetailPage />} />
           <Route
             path="/attorney-case-detail/:attorneyId/:caseId"
