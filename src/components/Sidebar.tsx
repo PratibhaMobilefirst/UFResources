@@ -22,16 +22,38 @@ import {
 import { useLocation } from "react-router-dom";
 
 const menuItems = [
-  { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard" },
-  { icon: Users, label: "Attorney Management", href: "/attorney-management" },
-  { icon: MessageSquare, label: "Campaign Management", href: "/campaign-management" },
-  { icon: FileText, label: "Clause Management", href: "/clause-management" },
-  { icon: Upload, label: "Upload Templates", href: "/upload-templates" },
-  { icon: CheckSquare, label: "Approve Templates", href: "/approve-template" },
-  { icon: FileSpreadsheet, label: "Template Management", href: "/template-management" },
-  { icon: BarChart2, label: "Report", href: "/report" },
-  { icon: Database, label: "Content Management System", href: "/content-management" },
-  { icon: UserCog, label: "User Access Management", href: "/user-management" },
+  {
+    icon: LayoutDashboard,
+    label: "legacy Assurance Plan",
+    href: "/legacy-assurance-plan",
+  },
+  {
+    icon: Users,
+    label: "Personal",
+    href: "/personal",
+  },
+  // { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard" },
+  // { icon: Users, label: "Attorney Management", href: "/attorney-management" },
+  // {
+  //   icon: MessageSquare,
+  //   label: "Campaign Management",
+  //   href: "/campaign-management",
+  // },
+  // { icon: FileText, label: "Clause Management", href: "/clause-management" },
+  // { icon: Upload, label: "Upload Templates", href: "/upload-templates" },
+  // { icon: CheckSquare, label: "Approve Templates", href: "/approve-template" },
+  // {
+  //   icon: FileSpreadsheet,
+  //   label: "Template Management",
+  //   href: "/template-management",
+  // },
+  // { icon: BarChart2, label: "Report", href: "/report" },
+  // {
+  //   icon: Database,
+  //   label: "Content Management System",
+  //   href: "/content-management",
+  // },
+  // { icon: UserCog, label: "User Access Management", href: "/user-management" },
 ];
 
 const Sidebar = () => {
