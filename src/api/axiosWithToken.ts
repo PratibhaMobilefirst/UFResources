@@ -11,7 +11,8 @@ const axiosWithToken = axios.create({
 // Add a request interceptor to include the token from Zustand store
 axiosWithToken.interceptors.request.use(
   (config) => {
-    const token = useAuthStore.getState().token; // Access token from Zustand store
+    const token = useAuthStore.getState().token;
+    console.log({ token }, "-----token-----");
 
     if (token) {
       config.headers["Authorization"] = `Bearer ${token}`; // Add token to the header

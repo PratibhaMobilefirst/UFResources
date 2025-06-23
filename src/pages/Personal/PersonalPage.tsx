@@ -24,8 +24,15 @@ import {
 import { format, formatISO } from "date-fns";
 import { usePrivateCases } from "@/hooks/usePrivateCases";
 import { useLogin } from "@/hooks/useLogin";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-const LegacyAssurancePlanPage = () => {
+const PersonalPage = () => {
   const navigate = useNavigate();
   const [currentTab, setCurrentTab] = useState("network-attorney");
   const [searchQuery, setSearchQuery] = useState("");
@@ -90,10 +97,9 @@ const LegacyAssurancePlanPage = () => {
   }));
 
   const totalPages = casesData?.meta?.totalPages || 1;
-
   const handleNavigate = (id: string, templateData: any) => {
     console.log(id, templateData, "templateData");
-    navigate(`/legacy-assurance-plan-detail/${id}`, {
+    navigate(`/personal-detail/${id}`, {
       state: { template: templateData, id: id },
     });
   };
@@ -130,6 +136,15 @@ const LegacyAssurancePlanPage = () => {
                 </TabsTrigger>
               </TabsList>
             </Tabs>
+
+            <div>
+              <Button
+                className="bg-[#00426E] hover:bg-[#003058]"
+                onClick={() => navigate("/create-case")}
+              >
+                Crate New Case
+              </Button>
+            </div>
           </div>
 
           <div className="flex flex-col md:flex-row gap-4 mb-6 items-center">
@@ -208,6 +223,29 @@ const LegacyAssurancePlanPage = () => {
                 </PopoverContent>
               </Popover>
             </div>
+
+            <div className="flex flex-col w-48" data-tour="state-filter">
+              <label className="text-sm font-medium text-[#222] mb-1">
+                State
+              </label>
+              <Select>
+                <SelectTrigger className="w-full border-[#D8D8D8]">
+                  <SelectValue placeholder="All States" />
+                </SelectTrigger>
+                <SelectContent
+                  style={{ maxHeight: "30vh", overflowY: "scroll" }}
+                >
+                  <SelectItem value="all">All States</SelectItem>
+                  <SelectItem value="Alabama">Alabama</SelectItem>
+                  <SelectItem value="Alaska">Alaska</SelectItem>
+                  <SelectItem value="Arizona">Arizona</SelectItem>
+                  <SelectItem value="Arkansas">Arkansas</SelectItem>
+                  <SelectItem value="California">California</SelectItem>
+                  <SelectItem value="Colorado">Colorado</SelectItem>
+                  <SelectItem value="Connecticut">Connecticut</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           <Tabs value={currentTab}>
@@ -281,4 +319,4 @@ const LegacyAssurancePlanPage = () => {
   );
 };
 
-export default LegacyAssurancePlanPage;
+export default PersonalPage;

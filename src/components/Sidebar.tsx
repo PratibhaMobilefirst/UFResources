@@ -27,6 +27,11 @@ const menuItems = [
     label: "legacy Assurance Plan",
     href: "/legacy-assurance-plan",
   },
+  {
+    icon: Users,
+    label: "Personal",
+    href: "/personal",
+  },
   // { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard" },
   // { icon: Users, label: "Attorney Management", href: "/attorney-management" },
   // {

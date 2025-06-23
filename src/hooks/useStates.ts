@@ -1,9 +1,9 @@
-import { ActiveStatesResponse, getActiveStates } from "@/api/statesApi";
 import { useQuery } from "@tanstack/react-query";
+import { getAttorneyStates, AttorneyStatesResponse } from "@/api/statesApi";
 
-export const useActiveStates = (page: number = 1, limit: number = 50) => {
-  return useQuery<ActiveStatesResponse>({
-    queryKey: ["activeStates", page, limit],
-    queryFn: () => getActiveStates(page, limit),
+export const useAttorneyStates = () => {
+  return useQuery<AttorneyStatesResponse>({
+    queryKey: ["attorneyStates"],
+    queryFn: getAttorneyStates,
   });
 };

@@ -2,6 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CustomTable } from "@/components/CustomTable";
 import { Eye, Download, ArrowLeft, Upload, Edit } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Pagination,
   PaginationContent,
@@ -11,23 +12,25 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useCaseDetails } from "@/hooks/usePrivateCases";
+import { useNavigate } from "react-router-dom";
 import { formatDate } from "@/utils/dateFormat";
+import { useState } from "react";
+interface DocumentContentProps {
+  data: any;
+  showEngagementLetter?: boolean;
+  handleNavigateEngagementLetter?: () => void;
+  handleNavigateDocument?: () => void;
+}
 
-export function DocumentContent() {
-  const { state } = useLocation();
-  const { template, id } = state;
+export function DocumentContent({
+  data,
+  showEngagementLetter,
+  handleNavigateEngagementLetter,
+  handleNavigateDocument,
+}: DocumentContentProps) {
   const navigate = useNavigate();
+  const [currentTab, setCurrentTab] = useState("network-attorney");
 
-  console.log(id?.attorneyId, template, "template");
-  const { data, isLoading, isError } = useCaseDetails({
-    caseId: template,
-    attorneyId: id?.attorneyId,
-  });
-  console.log({ data, isLoading, isError }, "data  isLoading isError");
-
-  console.log({ state }, "state");
   const engagementColumns = [
     { key: "sno", label: "S.no" },
     { key: "documentType", label: "Document Type" },
@@ -65,77 +68,6 @@ export function DocumentContent() {
       ),
     })) || [];
 
-  //   {
-  //     sno: "003",
-  //     documentType: "Engagement Letter",
-  //     createdOn: "1.2.2024",
-  //     lastModified: "1.2.2024",
-  //     status: "NA",
-  //     signingStatus: "NA",
-  //     preview: (
-  //       <Button variant="ghost" size="sm">
-  //         <Eye className="w-4 h-4" />
-  //       </Button>
-  //     ),
-  //     modify: (
-  //       <Button variant="ghost" size="sm">
-  //         <Edit className="w-4 h-4" />
-  //       </Button>
-  //     ),
-  //     export: (
-  //       <Button variant="ghost" size="sm">
-  //         <Download className="w-4 h-4" />
-  //       </Button>
-  //     ),
-  //   },
-  //   {
-  //     sno: "002",
-  //     documentType: "Engagement Letter",
-  //     createdOn: "30.1.2024",
-  //     lastModified: "30.1.2024",
-  //     status: "NA",
-  //     signingStatus: "NA",
-  //     preview: (
-  //       <Button variant="ghost" size="sm">
-  //         <Eye className="w-4 h-4" />
-  //       </Button>
-  //     ),
-  //     modify: (
-  //       <Button variant="ghost" size="sm">
-  //         <Edit className="w-4 h-4" />
-  //       </Button>
-  //     ),
-  //     export: (
-  //       <Button variant="ghost" size="sm">
-  //         <Download className="w-4 h-4" />
-  //       </Button>
-  //     ),
-  //   },
-  //   {
-  //     sno: "001",
-  //     documentType: "Engagement Letter",
-  //     createdOn: "28.1.2024",
-  //     lastModified: "28.1.2024",
-  //     status: "NA",
-  //     signingStatus: "NA",
-  //     preview: (
-  //       <Button variant="ghost" size="sm">
-  //         <Eye className="w-4 h-4" />
-  //       </Button>
-  //     ),
-  //     modify: (
-  //       <Button variant="ghost" size="sm">
-  //         <Edit className="w-4 h-4" />
-  //       </Button>
-  //     ),
-  //     export: (
-  //       <Button variant="ghost" size="sm">
-  //         <Download className="w-4 h-4" />
-  //       </Button>
-  //     ),
-  //   },
-  // ];
-
   const documentColumns = [
     { key: "sno", label: "S.no" },
     { key: "caseName", label: "Case Name" },
@@ -167,72 +99,9 @@ export function DocumentContent() {
       ),
     })) || [];
 
-  //   {
-  //     sno: "001",
-  //     caseName: "Simple Will",
-  //     lastUpdated: "1.2.2024",
-  //     documentStatus: (
-  //       <Badge variant="secondary" className="bg-orange-100 text-orange-800">
-  //         In Progress
-  //       </Badge>
-  //     ),
-  //     preview: (
-  //       <Button variant="ghost" size="sm">
-  //         <Eye className="w-4 h-4" />
-  //       </Button>
-  //     ),
-  //     editDocument: (
-  //       <Button variant="ghost" size="sm">
-  //         <Edit className="w-4 h-4" />
-  //       </Button>
-  //     ),
-  //   },
-  //   {
-  //     sno: "002",
-  //     caseName: "Simplified Estate P...",
-  //     lastUpdated: "1.2.2024",
-  //     documentStatus: (
-  //       <Badge variant="secondary" className="bg-orange-100 text-orange-800">
-  //         In Progress
-  //       </Badge>
-  //     ),
-  //     preview: (
-  //       <Button variant="ghost" size="sm">
-  //         <Eye className="w-4 h-4" />
-  //       </Button>
-  //     ),
-  //     editDocument: (
-  //       <Button variant="ghost" size="sm">
-  //         <Edit className="w-4 h-4" />
-  //       </Button>
-  //     ),
-  //   },
-  //   {
-  //     sno: "003",
-  //     caseName: "Power of Attorney",
-  //     lastUpdated: "1.2.2024",
-  //     documentStatus: (
-  //       <Badge variant="secondary" className="bg-green-100 text-green-800">
-  //         Completed
-  //       </Badge>
-  //     ),
-  //     preview: (
-  //       <Button variant="ghost" size="sm">
-  //         <Eye className="w-4 h-4" />
-  //       </Button>
-  //     ),
-  //     editDocument: (
-  //       <Button variant="ghost" size="sm">
-  //         <Edit className="w-4 h-4" />
-  //       </Button>
-  //     ),
-  //   },
-  // ];
-
   return (
     <div className="space-y-6">
       {/* Header */}
-
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Button variant="ghost" size="sm" onClick={() => navigate(-1)}>
@@ -241,13 +110,39 @@ export function DocumentContent() {
           <h2 className="text-2xl font-semibold">
             {data?.data?.attorney?.firstName || "N/A"}
           </h2>
-
           <Badge
             variant="secondary"
             className="bg-yellow-100 text-yellow-800 hover:bg-yellow-100"
           >
-            {data?.data?.isActive === true ? "Active" : "Inactive"}
+            {data?.data?.isActive ? "Active" : "Inactive"}
           </Badge>
+        </div>
+        <div className="flex flex-col md:flex-row justify-between mb-6 gap-4">
+          <Tabs
+            defaultValue="network-attorney"
+            value={currentTab}
+            onValueChange={(val) => setCurrentTab(val)}
+            className="w-full md:max-w-md"
+          >
+            <TabsList className="w-full bg-gray-100 p-0 h-auto">
+              <TabsTrigger
+                value="network-attorney"
+                className={`flex-1 py-2 ${
+                  currentTab === "network-attorney" ? "active" : "finished"
+                }`}
+              >
+                Mark as Active
+              </TabsTrigger>
+              <TabsTrigger
+                value="campaign"
+                className={`flex-1 py-2 ${
+                  currentTab === "campaign" ? "active" : "finished"
+                }`}
+              >
+                Mark as Finished
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
         </div>
       </div>
 
@@ -272,44 +167,45 @@ export function DocumentContent() {
       </div>
 
       {/* Engagement Letter Section */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold">Engagement Letter</h3>
-          <div className="flex gap-2">
-            <Button
-              className="bg-blue-600 hover:bg-blue-700 text-white cursor-pointer"
-              onClick={() => navigate("/create-engagement-letter")}
-            >
-              Create Engagement Letter
-            </Button>
-            <Button
-              variant="outline"
-              className="border-blue-600 text-blue-600 hover:bg-blue-50"
-            >
-              <Upload className="w-4 h-4 mr-2" />
-              Upload
-            </Button>
-          </div>
-        </div>
 
-        {engagementData.length > 0 ? (
-          <CustomTable columns={engagementColumns} data={engagementData} />
-        ) : (
-          <div className="bg-gray-50 border border-gray-200 rounded-lg p-12 text-center ">
-            <p className="text-gray-500 text-sm">
-              No engagement letter created yet
-            </p>
+      {showEngagementLetter && (
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h3 className="text-lg font-semibold">Engagement Letter</h3>
+            <div className="flex gap-2">
+              <Button
+                className="bg-[#00426E] hover:bg-[#003058]"
+                onClick={() => handleNavigateEngagementLetter()}
+              >
+                Create Engagement Letter
+              </Button>
+              <Button
+                variant="outline"
+                className="border-[#00426E] text-[#00426E] hover:bg-[#0030589f]"
+              >
+                <Upload className="w-4 h-4 mr-2" /> Upload
+              </Button>
+            </div>
           </div>
-        )}
-      </div>
+          {engagementData.length > 0 ? (
+            <CustomTable columns={engagementColumns} data={engagementData} />
+          ) : (
+            <div className="bg-gray-50 border border-gray-200 rounded-lg p-12 text-center">
+              <p className="text-gray-500 text-sm">
+                No engagement letter created yet
+              </p>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Document Section */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-semibold">Document</h3>
           <Button
-            className="bg-blue-600 hover:bg-blue-700 text-white"
-            onClick={() => navigate("/create-document")}
+            className="bg-[#00426E] hover:bg-[#003058]"
+            onClick={() => handleNavigateDocument()}
           >
             Create Document
           </Button>
@@ -328,29 +224,20 @@ export function DocumentContent() {
           <PaginationItem>
             <PaginationPrevious />
           </PaginationItem>
-
           <PaginationItem>
             <PaginationLink className="cursor-pointer">1</PaginationLink>
           </PaginationItem>
-
           <PaginationItem>
             <PaginationEllipsis />
           </PaginationItem>
-
           <PaginationItem>
             <PaginationLink>2</PaginationLink>
           </PaginationItem>
-
           {Array.from({ length: 5 }, (_, i) => i + 1).map((page) => (
             <PaginationItem key={page}>
               <PaginationLink>{page}</PaginationLink>
             </PaginationItem>
           ))}
-
-          <PaginationItem>
-            <PaginationLink>3</PaginationLink>
-          </PaginationItem>
-
           <PaginationItem>
             <PaginationNext />
           </PaginationItem>

@@ -1,34 +1,20 @@
 import axiosInstance from "./axiosInstance";
+import axiosWithToken from "./axiosWithToken";
 
-export interface ActiveState {
-  id: string;
-  stateCode: string;
+export interface AttorneyState {
+  stateId: string;
   stateName: string;
-  addedDate: string;
-  status: boolean;
-  createdAt: string;
-  updatedAt: string;
 }
 
-export interface ActiveStatesResponse {
+export interface AttorneyStatesResponse {
   status: boolean;
   message: string;
-  data: {
-    data: ActiveState[];
-    meta: {
-      total: number;
-      page: number;
-      totalPages: number;
-    };
-  };
+  data: AttorneyState[];
 }
 
-export const getActiveStates = async (
-  page: number = 1,
-  limit: number = 50
-): Promise<ActiveStatesResponse> => {
-  const response = await axiosInstance.get<ActiveStatesResponse>(
-    `/cms/active-states?page=${page}&limit=${limit}`
+export const getAttorneyStates = async (): Promise<AttorneyStatesResponse> => {
+  const response = await axiosWithToken.get<AttorneyStatesResponse>(
+    `/attorney/fetchAttorneyStates`
   );
   return response.data;
 };

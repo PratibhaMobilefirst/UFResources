@@ -12,7 +12,7 @@ import { ArrowLeft } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import Layout from "@/components/Layout";
 import Vector from "/lovable-uploads/Vector.svg";
-import { useActiveStates } from "@/hooks/useStates";
+// import { useActiveStates } from "@/hooks/useStates";
 
 const CreateEngagementLetter = () => {
   const [selectedState, setSelectedState] = useState("");
@@ -83,19 +83,9 @@ const CreateEngagementLetter = () => {
                           </SelectItem>
                         ))} */}
                         <SelectItem value="all">All States</SelectItem>
-                        {statesData?.data?.data?.map((roleItem) => {
-                          if (roleItem.stateName) {
-                            return (
-                              <SelectItem
-                                key={roleItem.id}
-                                value={roleItem.stateName}
-                              >
-                                {roleItem.stateName}
-                              </SelectItem>
-                            );
-                          }
-                          return null;
-                        })}
+                        <SelectItem value="Alabama">Alabama</SelectItem>
+                        <SelectItem value="Alaska">Alaska</SelectItem>
+                        <SelectItem value="Arizona">Arizona</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>

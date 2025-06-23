@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { ArrowLeft, FileText, ScrollText, Shield } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import Layout from "@/components/Layout";
 import {
   Select,
   SelectContent,
@@ -8,15 +11,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ArrowLeft } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
-import Layout from "@/components/Layout";
-import Vector from "/lovable-uploads/Vector.svg";
+import { DocumentTypeCard } from "@/components/ui/DocumentTypeCard";
+import { useAttorneyStates } from "@/hooks/useStates";
 
 const CreateDocument = () => {
   const [selectedState, setSelectedState] = useState("");
   const [selectedDocumentType, setSelectedDocumentType] = useState("");
   const navigate = useNavigate();
+  const { data, isLoading, error } = useAttorneyStates();
 
   const states = [
     "Alabama",
@@ -72,17 +74,26 @@ const CreateDocument = () => {
   ];
 
   const documentTypes = [
-    "Simple Will",
-    "Complex Will",
-    "Trust Document",
-    "Power of Attorney",
-    "Healthcare Directive",
-    "Living Will",
+    {
+      id: "simple-will",
+      title: "Simple Will",
+      icon: <FileText className="w-6 h-6" />,
+    },
+    {
+      id: "simplified-estate-planning",
+      title: "Simplified Estate Planning",
+      icon: <ScrollText className="w-6 h-6" />,
+    },
+    {
+      id: "power-of-attorney",
+      title: "Power of Attorney",
+      icon: <Shield className="w-6 h-6" />,
+    },
   ];
 
   const handleNext = () => {
     if (selectedState && selectedDocumentType) {
-      console.log("Creating engagement letter with:", {
+      console.log("Creating document with:", {
         state: selectedState,
         documentType: selectedDocumentType,
       });
@@ -94,73 +105,101 @@ const CreateDocument = () => {
     <Layout>
       <div className="p-8">
         <div className="max-w-7xl mx-auto">
-          <Card className="w-full p-8 h-[70vh]">
-            <CardHeader>
-              <div className="flex items-center ">
+          <Card className="w-full">
+            <CardHeader className="pb-4">
+              <div className="flex items-center space-x-3 mb-4">
                 <button
-                  className=" flex items-center mr-2"
+                  className="flex items-center text-gray-600 hover:text-gray-800"
                   onClick={() => navigate(-1)}
                 >
-                  <img src={Vector} alt="" className="w-5 h-5" />
+                  <ArrowLeft className="w-5 h-5" />
                 </button>
-                <span className="text-[22px] font-[500] ">Create Document</span>
+                <h1 className="text-xl font-semibold text-gray-900">
+                  Create Document
+                </h1>
               </div>
-              <hr />
+              <div className="border-b border-gray-200"></div>
             </CardHeader>
 
-            <CardContent>
-              <div className="space-y-6">
-                <div className="space-y-4 w-96">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+            <CardContent className="p-8">
+              <div className="space-y-8">
+                {/* Choose a Template Section */}
+                <div>
+                  <h2 className="text-lg font-medium text-gray-900 mb-6">
+                    Choose a Template
+                  </h2>
+
+                  {/* State Selection */}
+                  <div className="mb-8">
+                    <label className="block text-sm font-medium text-gray-700 mb-3">
                       Select State <span className="text-red-500">*</span>
                     </label>
-                    <Select
-                      value={selectedState}
-                      onValueChange={setSelectedState}
-                    >
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select State" />
-                      </SelectTrigger>
-                      <SelectContent
-                        style={{ maxHeight: "40vh", overflowY: "scroll" }}
+                    <div className="max-w-xs">
+                      <Select
+                        value={selectedState}
+                        onValueChange={setSelectedState}
                       >
-                        {states.map((state) => (
-                          <SelectItem key={state} value={state}>
-                            {state}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Select State" />
+                        </SelectTrigger>
+                        <SelectContent className="max-h-60">
+                          {data?.data?.map((state) => (
+                            <SelectItem
+                              key={state?.stateId}
+                              value={state.stateId}
+                            >
+                              {state.stateName}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
 
-                  <div className=" py-7">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                  {/* Document Type Selection */}
+                  <div className="mb-8">
+                    <label className="block text-sm font-medium text-gray-700 mb-4">
                       Document type
                     </label>
-                    <Select
-                      value={selectedDocumentType}
-                      onValueChange={setSelectedDocumentType}
-                    >
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select Document type" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {documentTypes.map((type) => (
-                          <SelectItem key={type} value={type}>
-                            {type}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <div className="max-w-xs mb-4">
+                      <Select
+                        value={selectedDocumentType}
+                        onValueChange={setSelectedDocumentType}
+                      >
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Select Document type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {documentTypes.map((type) => (
+                            <SelectItem key={type.id} value={type.id}>
+                              {type.title}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    {/* Document Type Cards */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-2xl">
+                      {documentTypes.map((type) => (
+                        <DocumentTypeCard
+                          key={type.id}
+                          title={type.title}
+                          isSelected={selectedDocumentType === type.id}
+                          onClick={() => setSelectedDocumentType(type.id)}
+                          icon={type.icon}
+                        />
+                      ))}
+                    </div>
                   </div>
                 </div>
 
-                <div className="flex justify-end pt-4">
+                {/* Next Button */}
+                <div className="flex justify-end pt-6 border-t border-gray-200">
                   <Button
                     onClick={handleNext}
                     disabled={!selectedState || !selectedDocumentType}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-8"
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-2 font-medium"
                   >
                     Next
                   </Button>

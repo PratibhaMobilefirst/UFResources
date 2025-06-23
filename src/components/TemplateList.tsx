@@ -7,18 +7,17 @@ interface TemplateListProps {
   templates?: TemplateCard[];
   isLoading: boolean;
   isError: boolean;
+  handleNavigate: (id: string, templateData: any) => void;
 }
 
 const TemplateList = ({
   templates = [],
   isLoading,
   isError,
+  handleNavigate,
 }: TemplateListProps) => {
-  const navigate = useNavigate();
   const handleTemplateClick = (id: string, templateData: any) => {
-    navigate(`/legacy-assurance-plan-detail/${id}`, {
-      state: { template: templateData, id: id },
-    });
+    handleNavigate(id, templateData);
   };
 
   if (isLoading) {
