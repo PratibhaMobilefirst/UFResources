@@ -1,4 +1,3 @@
-// src/hooks/usePrivateCases.ts
 import {
   getCaseDetails,
   getPrivateCases,
@@ -19,15 +18,19 @@ interface UseCaseDetailsParams {
   caseId: string;
   attorneyId: string;
   isActive?: boolean;
+  page: number;
+  limit: number;
 }
 
 export const useCaseDetails = ({
   caseId,
   attorneyId,
+  page,
+  limit,
 }: UseCaseDetailsParams) => {
   return useQuery<UseCaseDetailsParams>({
-    queryKey: ["caseDetails", caseId, attorneyId],
-    queryFn: () => getCaseDetails({ caseId, attorneyId }),
+    queryKey: ["caseDetails", caseId, attorneyId, page, limit],
+    queryFn: () => getCaseDetails({ caseId, attorneyId, page, limit }),
     enabled: !!caseId && !!attorneyId,
   });
 };

@@ -48,13 +48,22 @@ export const getPrivateCases = async (
 interface CaseDetails {
   caseId: string;
   attorneyId: string;
+  page: number;
+  limit: number;
 }
 
-export const getCaseDetails = async ({ caseId, attorneyId }: CaseDetails) => {
+export const getCaseDetails = async ({
+  caseId,
+  attorneyId,
+  page,
+  limit,
+}: CaseDetails): Promise<PrivateCasesResponse> => {
   const response = await axiosInstance.get(`/network-attorney/case-details`, {
     params: {
       attorneyId: attorneyId,
       caseId: caseId,
+      page,
+      limit,
     },
   });
   return response.data;

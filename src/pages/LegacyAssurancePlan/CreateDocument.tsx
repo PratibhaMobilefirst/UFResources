@@ -13,65 +13,20 @@ import {
 } from "@/components/ui/select";
 import { DocumentTypeCard } from "@/components/ui/DocumentTypeCard";
 import { useAttorneyStates } from "@/hooks/useStates";
+import { useDocumentType } from "@/hooks/UseDocumentType";
 
 const CreateDocument = () => {
   const [selectedState, setSelectedState] = useState("");
   const [selectedDocumentType, setSelectedDocumentType] = useState("");
   const navigate = useNavigate();
   const { data, isLoading, error } = useAttorneyStates();
+  const {
+    data: templateCardsData,
+    isLoading: isLoadingTemplateCards,
+    error: templateCardsError,
+  } = useDocumentType(selectedState);
 
-  const states = [
-    "Alabama",
-    "Alaska",
-    "Arizona",
-    "Arkansas",
-    "California",
-    "Colorado",
-    "Connecticut",
-    "Delaware",
-    "Florida",
-    "Georgia",
-    "Hawaii",
-    "Idaho",
-    "Illinois",
-    "Indiana",
-    "Iowa",
-    "Kansas",
-    "Kentucky",
-    "Louisiana",
-    "Maine",
-    "Maryland",
-    "Massachusetts",
-    "Michigan",
-    "Minnesota",
-    "Mississippi",
-    "Missouri",
-    "Montana",
-    "Nebraska",
-    "Nevada",
-    "New Hampshire",
-    "New Jersey",
-    "New Mexico",
-    "New York",
-    "North Carolina",
-    "North Dakota",
-    "Ohio",
-    "Oklahoma",
-    "Oregon",
-    "Pennsylvania",
-    "Rhode Island",
-    "South Carolina",
-    "South Dakota",
-    "Tennessee",
-    "Texas",
-    "Utah",
-    "Vermont",
-    "Virginia",
-    "Washington",
-    "West Virginia",
-    "Wisconsin",
-    "Wyoming",
-  ];
+  console.log(templateCardsData?.data?.data[0].documents, "templateCardsData");
 
   const documentTypes = [
     {

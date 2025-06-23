@@ -11,6 +11,8 @@ export function PersonalDetailPage() {
   const { data, isLoading, isError } = useCaseDetails({
     caseId: template,
     attorneyId: id?.attorneyId,
+    page: 1,
+    limit: 10,
   });
   return (
     <Layout>
