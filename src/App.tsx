@@ -31,7 +31,9 @@ import CreateDocument from "./pages/LegacyAssurancePlan/CreateDocument";
 import PersonalPage from "./pages/Personal/PersonalPage";
 import { PersonalDetailPage } from "./pages/Personal/PersonalDetailPage";
 import CreateCase from "./pages/Personal/CreateCase";
-
+import DocumentEditor from "./pages/Personal/DocumentEditor";
+import EngagementLetterCreation from "./pages/Personal/EngagementLetterCreation";
+import CreateDocumentP from "./pages/Personal/CreateDocumentP";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -63,7 +65,9 @@ const App = () => (
           <Route path="/personal" element={<PersonalPage />} />
           <Route path="/create-case" element={<CreateCase />} />
           <Route path="/personal-detail/:id" element={<PersonalDetailPage />} />
-
+            <Route path="/engagement-letter/:caseId" element={<EngagementLetterCreation />} />
+            <Route path="/personal-create-document" element={<CreateDocumentP />} />
+                   {/* <Route path="/document-editor" element={<DocumentEditor />} /> */}
           <Route path="/attorney-detail/:id" element={<AttorneyDetailPage />} />
           <Route
             path="/attorney-case-detail/:attorneyId/:caseId"

@@ -37,14 +37,14 @@ export const ConfirmApprovalDialog = ({
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Are You Sure, You want to approve?</AlertDialogTitle>
-          <AlertDialogDescription>
+          {/* <AlertDialogDescription>
             You are about to approve the template "{document.documentName}". This action cannot be undone.
-          </AlertDialogDescription>
+          </AlertDialogDescription> */}
         </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>No</AlertDialogCancel>
-          <AlertDialogAction onClick={onApprove} className="bg-green-500 hover:bg-green-600">
-            <Check className="mr-2 h-4 w-4" /> Yes
+        <AlertDialogFooter className="w-full flex justify-between items-center ">
+          <AlertDialogCancel className="px-4">Cancel</AlertDialogCancel>
+          <AlertDialogAction onClick={onApprove} className="bg-green-500 hover:bg-green-600 px-4">
+             Approve
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

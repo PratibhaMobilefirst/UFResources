@@ -14,8 +14,9 @@ import {
 import { DocumentTypeCard } from "@/components/ui/DocumentTypeCard";
 import { useAttorneyStates } from "@/hooks/useStates";
 import { useDocumentType } from "@/hooks/UseDocumentType";
-
-const CreateDocument = () => {
+import BackArrow from "../../asset/img/Group 37878.svg"
+import TemplateList from "@/components/TemplateList";
+const CreateDocumentP = () => {
   const [selectedState, setSelectedState] = useState("");
   const [selectedDocumentType, setSelectedDocumentType] = useState("");
   const navigate = useNavigate();
@@ -28,23 +29,27 @@ const CreateDocument = () => {
 
   console.log(templateCardsData?.data?.data[0].documents, "templateCardsData");
 
-  const documentTypes = [
-    {
-      id: "simple-will",
-      title: "Simple Will",
-      icon: <FileText className="w-6 h-6" />,
-    },
-    {
-      id: "simplified-estate-planning",
-      title: "Simplified Estate Planning",
-      icon: <ScrollText className="w-6 h-6" />,
-    },
-    {
-      id: "power-of-attorney",
-      title: "Power of Attorney",
-      icon: <Shield className="w-6 h-6" />,
-    },
-  ];
+const template = [
+  {
+    id: "simple-will",
+    templateCardName: "Simple Will",
+    categories: [{ category: { templateName: "Will" } }],
+    icon: <FileText className="w-6 h-6" />,
+  },
+  {
+    id: "simplified-estate-planning",
+    templateCardName: "Simplified Estate Planning",
+    categories: [{ category: { templateName: "Estate" } }],
+    icon: <ScrollText className="w-6 h-6" />,
+  },
+  {
+    id: "power-of-attorney",
+    templateCardName: "Power of Attorney",
+    categories: [{ category: { templateName: "Legal" } }],
+    icon: <Shield className="w-6 h-6" />,
+  },
+];
+
 
   const handleNext = () => {
     if (selectedState && selectedDocumentType) {
@@ -67,7 +72,7 @@ const CreateDocument = () => {
                   className="flex items-center text-gray-600 hover:text-gray-800"
                   onClick={() => navigate(-1)}
                 >
-                  <ArrowLeft className="w-5 h-5" />
+                  <img src={BackArrow} className="w-5 h-5" />
                 </button>
                 <h1 className="text-xl font-semibold text-gray-900">
                   Create Document
@@ -125,18 +130,18 @@ const CreateDocument = () => {
                           <SelectValue placeholder="Select Document type" />
                         </SelectTrigger>
                         <SelectContent>
-                          {documentTypes.map((type) => (
+                          {template.map((type) => (
                             <SelectItem key={type.id} value={type.id}>
-                              {type.title}
+                              {type.templateCardName}
                             </SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
                     </div>
 
-                    {/* Document Type Cards *
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-2xl">
-                      {documentTypes.map((type) => (
+                     {/* Document Type Cards  */}
+                    {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-2xl">
+                      {docume.map((type) => (
                         <DocumentTypeCard
                           key={type.id}
                           title={type.title}
@@ -145,7 +150,15 @@ const CreateDocument = () => {
                           icon={type.icon}
                         />
                       ))}
-                    </div>*/}
+                    </div> */}
+                    <div className="p-5 bg-gray-50 border">
+                    <TemplateList
+                      templates={template}
+                      isLoading={false}
+                      isError={false} handleNavigate={function (id: string, templateData: any): void {
+                        throw new Error("Function not implemented.");
+                      } }               
+              /> </div>
                   </div> 
                 </div>
 
@@ -168,4 +181,4 @@ const CreateDocument = () => {
   );
 };
 
-export default CreateDocument;
+export default CreateDocumentP;

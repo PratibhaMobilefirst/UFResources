@@ -78,7 +78,15 @@ const Sidebar = () => {
                     <a
                       href={item.href}
                       className={`flex items-center gap-2 p-2 hover:bg-[#E7F5FF] rounded-md hover:text-[#00426E] text-base font-medium roboto-font ${
-                        location.pathname === item.href
+                        location.pathname === item.href || (
+  item.href === "/personal" &&
+  [
+    "/create-case",
+    "/personal-detail",
+    "/engagement-letter",
+    "/personal-create-document"
+  ].some((prefix) => location.pathname.startsWith(prefix))
+)
                           ? "bg-[#E7F5FF] text-[#00426E]"
                           : "text-[#222B45]"
                       }`}
