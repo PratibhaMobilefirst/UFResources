@@ -13,7 +13,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Layout from "@/components/Layout";
 import Vector from "/lovable-uploads/Vector.svg";
 import { Input } from "@/components/ui/input";
-
+import BackArrow from "../../asset/img/Group 37878.svg"
 const CreateCase = () => {
   const [selectedState, setSelectedState] = useState("");
   const [selectedDocumentType, setSelectedDocumentType] = useState("");
@@ -102,7 +102,7 @@ const CreateCase = () => {
                   className=" flex items-center mr-2"
                   onClick={() => navigate(-1)}
                 >
-                  <img src={Vector} alt="" className="w-5 h-5" />
+                  <img src={BackArrow} alt="" className="w-5 h-5" />
                 </button>
                 <span className="text-[22px] font-[500] ">Create Case</span>
               </div>
@@ -206,7 +206,7 @@ const CreateCase = () => {
                   <Button
                     onClick={handleNext}
                     disabled={!selectedState || !selectedDocumentType}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-8"
+                    className="bg-[#00426E] hover:bg-[#00426E] text-white px-12 py-2 font-medium"
                   >
                     Next
                   </Button>

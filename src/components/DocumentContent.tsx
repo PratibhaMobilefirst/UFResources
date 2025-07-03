@@ -15,6 +15,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { formatDate } from "@/utils/dateFormat";
 import { useState } from "react";
+import BackArrow from "../asset/img/Group 37878.svg"
 interface DocumentContentProps {
   data: any;
   showEngagementLetter?: boolean;
@@ -23,6 +24,7 @@ interface DocumentContentProps {
   onPageChange: (page: number) => void;
   handleNavigateEngagementLetter?: () => void;
   handleNavigateDocument?: () => void;
+ 
 }
 
 export function DocumentContent({
@@ -33,6 +35,7 @@ export function DocumentContent({
   onPageChange,
   handleNavigateEngagementLetter,
   handleNavigateDocument,
+ 
 }: DocumentContentProps) {
   const navigate = useNavigate();
   const [currentTab, setCurrentTab] = useState("network-attorney");
@@ -111,45 +114,54 @@ export function DocumentContent({
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Button variant="ghost" size="sm" onClick={() => navigate(-1)}>
-            <ArrowLeft className="w-4 h-4" />
+            <img src={BackArrow} alt="img" className="w-6 h-6" />
           </Button>
           <h2 className="text-2xl font-semibold">
             {data?.data?.attorney?.firstName || "N/A"}
           </h2>
           <Badge
             variant="secondary"
-            className="bg-yellow-100 text-yellow-800 hover:bg-yellow-100"
+             className={`px-4 py-2 text-sm font-medium rounded-full transition ${
+      data?.data?.isActive
+        ? "bg-[#00426E] text-white"
+        : "text-gray-500 hover:bg-gray-200"
+    }`}
           >
             {data?.data?.isActive ? "Active" : "Inactive"}
           </Badge>
         </div>
-        <div className="flex flex-col md:flex-row justify-between mb-6 gap-4">
-          <Tabs
-            defaultValue="network-attorney"
-            value={currentTab}
-            onValueChange={(val) => setCurrentTab(val)}
-            className="w-full md:max-w-md"
-          >
-            <TabsList className="w-full bg-gray-100 p-0 h-auto">
-              <TabsTrigger
-                value="network-attorney"
-                className={`flex-1 py-2 ${
-                  currentTab === "network-attorney" ? "active" : "finished"
-                }`}
-              >
-                Mark as Active
-              </TabsTrigger>
-              <TabsTrigger
-                value="campaign"
-                className={`flex-1 py-2 ${
-                  currentTab === "campaign" ? "active" : "finished"
-                }`}
-              >
-                Mark as Finished
-              </TabsTrigger>
-            </TabsList>
-          </Tabs>
-        </div>
+       <div className="flex flex-col md:flex-row justify-between mb-6 gap-4">
+  <Tabs
+    defaultValue="network-attorney"
+    value={currentTab}
+    onValueChange={(val) => setCurrentTab(val)}
+    className="w-full md:max-w-md"
+  >
+    <TabsList className="w-full bg-gray-100 rounded-full p-1 h-auto flex">
+      <TabsTrigger
+        value="network-attorney"
+        className={`flex-1 rounded-full px-4 py-2 text-sm font-medium transition ${
+          currentTab === "network-attorney"
+            ? "bg-[#00426E] text-white"
+            : "text-gray-700 hover:bg-gray-200"
+        }`}
+      >
+        Mark as Active
+      </TabsTrigger>
+      <TabsTrigger
+        value="campaign"
+        className={`flex-1 rounded-full px-4 py-2 text-sm font-medium transition ${
+          currentTab === "campaign"
+            ? "bg-[#00426E] text-white"
+            : "text-gray-700 hover:bg-gray-200"
+        }`}
+      >
+        Mark as Finished
+      </TabsTrigger>
+    </TabsList>
+  </Tabs>
+</div>
+
       </div>
 
       {/* Case Information */}
@@ -174,7 +186,7 @@ export function DocumentContent({
 
       {/* Engagement Letter Section */}
 
-      {showEngagementLetter && (
+      {/* {showEngagementLetter && ( */}
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-semibold">Engagement Letter</h3>
@@ -187,7 +199,7 @@ export function DocumentContent({
               </Button>
               <Button
                 variant="outline"
-                className="border-[#00426E] text-[#00426E] hover:bg-[#0030589f]"
+                className="bg-[#00426E] text-white hover:bg-[#0030589f]"
               >
                 <Upload className="w-4 h-4 mr-2" /> Upload
               </Button>
@@ -203,18 +215,26 @@ export function DocumentContent({
             </div>
           )}
         </div>
-      )}
+      {/* )} */}
 
       {/* Document Section */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-semibold">Document</h3>
+           <div className="flex gap-2">
           <Button
             className="bg-[#00426E] hover:bg-[#003058]"
             onClick={() => handleNavigateDocument()}
           >
             Create Document
           </Button>
+           {/* <Button
+                variant="outline"
+                className="bg-[#00426E] text-white hover:bg-[#0030589f]"
+              >
+                <Upload className="w-4 h-4 mr-2" /> Upload
+              </Button> */}
+              </div>
         </div>
         {documentData.length > 0 ? (
           <CustomTable columns={documentColumns} data={documentData} />

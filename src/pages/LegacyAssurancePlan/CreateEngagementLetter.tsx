@@ -13,13 +13,13 @@ import { Link, useNavigate } from "react-router-dom";
 import Layout from "@/components/Layout";
 import Vector from "/lovable-uploads/Vector.svg";
 // import { useActiveStates } from "@/hooks/useStates";
-
+import BackArrow from "../../asset/img/Group 37878.svg"
 const CreateEngagementLetter = () => {
   const [selectedState, setSelectedState] = useState("");
   const [selectedDocumentType, setSelectedDocumentType] = useState("");
   const navigate = useNavigate();
   // const { data: statesData } = useActiveStates(1, 50);
-  console.log(statesData, "statesData");
+  // console.log(statesData, "statesData");
 
   const documentTypes = [
     "Simple Will",
@@ -42,8 +42,8 @@ const CreateEngagementLetter = () => {
 
   return (
     <Layout>
-      <div className="p-8">
-        <div className="max-w-7xl mx-auto">
+      <div className="">
+        <div className="">
           <Card className="w-full p-8 h-[70vh]">
             <CardHeader>
               <div className="flex items-center ">
@@ -51,7 +51,7 @@ const CreateEngagementLetter = () => {
                   className=" flex items-center mr-2"
                   onClick={() => navigate(-1)}
                 >
-                  <img src={Vector} alt="" className="w-5 h-5" />
+                <img src={BackArrow} className="w-5 h-5" />
                 </button>
                 <span className="text-[22px] font-[500] ">
                   Create Engagement Letter
@@ -63,9 +63,10 @@ const CreateEngagementLetter = () => {
             <CardContent>
               <div className="space-y-6">
                 <div className="space-y-4 w-96">
+                  <h1 className="text-[22px] font-500">Choose a Template</h1>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Select State <span className="text-red-500">*</span>
+                      Select State
                     </label>
                     <Select
                       value={selectedState}
@@ -112,11 +113,11 @@ const CreateEngagementLetter = () => {
                   </div>
                 </div>
 
-                <div className="flex justify-end pt-4">
+                <div className="flex justify-end pt-4 mt-40">
                   <Button
                     onClick={handleNext}
                     disabled={!selectedState || !selectedDocumentType}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-8"
+                    className="bg-[#00426E] hover:bg-[#00426E] text-white px-10"
                   >
                     Next
                   </Button>

@@ -20,7 +20,8 @@ import {
   UserCog,
 } from "lucide-react";
 import { useLocation } from "react-router-dom";
-
+import logo from "../asset/img/Logomain.svg";
+import LAP from "../asset/img/lap.svg"
 const menuItems = [
   {
     icon: LayoutDashboard,
@@ -61,13 +62,9 @@ const Sidebar = () => {
   return (
     <SidebarComponent>
       <SidebarContent className="bg-white ">
-        <div className="px-6 py-4">
-          {/* Add Logo here */}
-          <img
-            src="/lovable-uploads/Logo.svg" // Adjust with the correct path
-            alt="Legacy Assurance Plan Logo"
-            className="h-10"
-          />
+        {/* Logo */}
+        <div className="hidden md:flex justify-center items-center h-16 border-b">
+          <img src={logo} alt="Logo" className="h-10" />
         </div>
         <SidebarGroup>
           <SidebarGroupContent>
@@ -78,7 +75,24 @@ const Sidebar = () => {
                     <a
                       href={item.href}
                       className={`flex items-center gap-2 p-2 hover:bg-[#E7F5FF] rounded-md hover:text-[#00426E] text-base font-medium roboto-font ${
-                        location.pathname === item.href
+                        location.pathname === item.href ||
+                        (item.href === "/personal" &&
+                          [
+                            "/create-case",
+                            "/personal-detail",
+                            "/engagement-letter",
+                            "/personal-create-document",
+                          ].some((prefix) =>
+                            location.pathname.startsWith(prefix)
+                          ))||(item.href === "/legacy-assurance-plan" &&
+                          [
+                            "/create-engagement-letter",
+                            "/create-document",
+                            "/legacy-assurance-plan-detail",
+                           
+                          ].some((prefix) =>
+                            location.pathname.startsWith(prefix)
+                          ))
                           ? "bg-[#E7F5FF] text-[#00426E]"
                           : "text-[#222B45]"
                       }`}
