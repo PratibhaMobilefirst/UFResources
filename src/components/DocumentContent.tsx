@@ -186,7 +186,7 @@ export function DocumentContent({
 
       {/* Engagement Letter Section */}
 
-      {showEngagementLetter && (
+      {/* {showEngagementLetter && ( */}
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-semibold">Engagement Letter</h3>
@@ -215,7 +215,7 @@ export function DocumentContent({
             </div>
           )}
         </div>
-      )}
+      {/* )} */}
 
       {/* Document Section */}
       <div className="space-y-4">
@@ -228,12 +228,12 @@ export function DocumentContent({
           >
             Create Document
           </Button>
-           <Button
+           {/* <Button
                 variant="outline"
                 className="bg-[#00426E] text-white hover:bg-[#0030589f]"
               >
                 <Upload className="w-4 h-4 mr-2" /> Upload
-              </Button>
+              </Button> */}
               </div>
         </div>
         {documentData.length > 0 ? (

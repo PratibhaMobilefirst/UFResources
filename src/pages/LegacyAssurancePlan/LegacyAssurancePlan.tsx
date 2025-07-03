@@ -282,6 +282,8 @@
 // };
 
 // export default LegacyAssurancePlanPage;
+import { format } from "date-fns";
+import { Calendar } from "@/components/ui/calendar";
 import Layout from "@/components/Layout";
 import TemplateList from "@/components/TemplateList";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -289,6 +291,13 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Pagination,
   PaginationContent,
@@ -298,10 +307,16 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { useNavigate } from "react-router-dom";
-
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 const LegacyAssurancePlanPage = () => {
   const [currentTab, setCurrentTab] = useState("network-attorney");
   const [currentPage, setCurrentPage] = useState(1);
+    const [startDate, setStartDate] = useState<Date | undefined>(undefined);
+  const [endDate, setEndDate] = useState<Date | undefined>(undefined);
 const navigate = useNavigate();
   const totalPages = 3; // mocked pagination
 
@@ -336,36 +351,103 @@ const navigate = useNavigate();
           <h1 className="text-2xl font-bold mb-6">Case</h1>
 
           <div className="flex flex-col md:flex-row justify-between mb-6 gap-4">
-            <Tabs
-              defaultValue="network-attorney"
-              value={currentTab}
-              onValueChange={setCurrentTab}
-              className="w-full md:max-w-md"
-            >
-              <TabsList className="w-full bg-gray-100 p-0 h-auto">
-                <TabsTrigger
-                  value="network-attorney"
-                  className="flex-1 py-2"
-                >
-                  Active Classes
-                </TabsTrigger>
-                <TabsTrigger
-                  value="campaign"
-                  className="flex-1 py-2"
-                >
-                  Finished Classes
-                </TabsTrigger>
-              </TabsList>
-            </Tabs>
+           <Tabs
+  defaultValue="network-attorney"
+  value={currentTab}
+  onValueChange={setCurrentTab}
+  className="w-full md:max-w-md"
+>
+  <TabsList className="w-full bg-gray-100 p-1 rounded-md flex border border-gray-300">
+    <TabsTrigger
+      value="network-attorney"
+      className="flex-1 py-2 text-sm font-medium data-[state=active]:bg-white data-[state=active]:text-[#00426E] data-[state=active]:font-bold rounded-md"
+    >
+      Active Cases
+    </TabsTrigger>
+    <TabsTrigger
+      value="campaign"
+      className="flex-1 py-2 text-sm font-medium data-[state=active]:bg-white data-[state=active]:text-[#00426E] data-[state=active]:font-bold rounded-md"
+    >
+      Finished Cases
+    </TabsTrigger>
+  </TabsList>
+</Tabs>
+
           </div>
 
-          <div className="flex gap-2 mb-6">
-            <div className="relative w-full md:w-60">
-              <Input type="text" placeholder="Search by document name" />
-              <Search className="absolute right-3 top-3 h-4 w-4 text-gray-400" />
-            </div>
-            <Button className="bg-[#00426E] hover:bg-[#003058]">Search</Button>
-          </div>
+         <div className="flex flex-wrap md:flex-nowrap items-end gap-4 mb-6">
+  {/* Search Box */}
+  <div className="flex gap-2 w-full md:w-1/4">
+    <div className="relative w-full">
+      <Input type="text" placeholder="Search by document name" />
+      <Search className="absolute right-3 top-3 h-4 w-4 text-gray-400" />
+    </div>
+    <Button className="bg-[#00426E] hover:bg-[#003058]">Search</Button>
+  </div>
+
+  {/* Start Date Picker */}
+  <div className="w-full md:w-1/4">
+    <label className="text-sm font-medium mb-1 block">Start Date</label>
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          className="w-full justify-start text-left font-normal"
+        >
+          {startDate ? format(startDate, "yyyy-MM-dd") : "Pick a start date"}
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-auto p-0">
+        <Calendar
+          mode="single"
+          selected={startDate}
+          onSelect={setStartDate}
+          initialFocus
+        />
+      </PopoverContent>
+    </Popover>
+  </div>
+
+  {/* End Date Picker */}
+  <div className="w-full md:w-1/4">
+    <label className="text-sm font-medium mb-1 block">End Date</label>
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          className="w-full justify-start text-left font-normal"
+        >
+          {endDate ? format(endDate, "yyyy-MM-dd") : "Pick an end date"}
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-auto p-0">
+        <Calendar
+          mode="single"
+          selected={endDate}
+          onSelect={setEndDate}
+          initialFocus
+        />
+      </PopoverContent>
+    </Popover>
+  </div>
+
+  {/* State Dropdown */}
+  <div className="w-full md:w-1/4 flex flex-col" data-tour="state-filter">
+    <label className="text-sm font-medium text-[#222] mb-1">State</label>
+    <Select>
+      <SelectTrigger className="w-full border-[#D8D8D8]">
+        <SelectValue placeholder="All States" />
+      </SelectTrigger>
+      <SelectContent style={{ maxHeight: "30vh", overflowY: "scroll" }}>
+        <SelectItem value="all">All States</SelectItem>
+        <SelectItem value="Alabama">Alabama</SelectItem>
+        <SelectItem value="California">California</SelectItem>
+        <SelectItem value="Texas">Texas</SelectItem>
+        <SelectItem value="New York">New York</SelectItem>
+      </SelectContent>
+    </Select>
+  </div>
+</div>
 
           <Tabs value={currentTab}>
             <TabsContent value="network-attorney">
