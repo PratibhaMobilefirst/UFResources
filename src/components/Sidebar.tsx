@@ -7,102 +7,88 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
 } from "@/components/ui/sidebar";
-import {
-  LayoutDashboard,
-  Users,
-  MessageSquare,
-  FileText,
-  Upload,
-  CheckSquare,
-  FileSpreadsheet,
-  BarChart2,
-  Database,
-  UserCog,
-} from "lucide-react";
-import { useLocation } from "react-router-dom";
+
+import { Link, useLocation } from "react-router-dom";
 import logo from "../asset/img/Logomain.svg";
-import LAP from "../asset/img/lap.svg"
+import mb1 from "../asset/img/mb1.svg";       // Active icon for Legacy Assurance Plan
+import mb2 from "../asset/img/mb2.svg";       // Inactive icon
+import person1 from "../asset/img/ion_person1.svg"; // Active icon for Personal
+import person2 from "../asset/img/ion_person.svg";  // Inactive icon
+
 const menuItems = [
   {
-    icon: LayoutDashboard,
-    label: "legacy Assurance Plan",
+    label: "Legacy Assurance Plan",
     href: "/legacy-assurance-plan",
+    icons: {
+      active: mb1,
+      inactive: mb2,
+    },
+    matchRoutes: [
+      "/legacy-assurance-plan",
+      "/create-engagement-letter",
+      "/create-document",
+      "/legacy-assurance-plan-detail",
+    ],
   },
   {
-    icon: Users,
     label: "Personal",
     href: "/personal",
+    icons: {
+      active: person1,
+      inactive: person2,
+    },
+    matchRoutes: [
+      "/personal",
+      "/create-case",
+      "/personal-detail",
+      "/engagement-letter",
+      "/personal-create-document",
+    ],
   },
-  // { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard" },
-  // { icon: Users, label: "Attorney Management", href: "/attorney-management" },
-  // {
-  //   icon: MessageSquare,
-  //   label: "Campaign Management",
-  //   href: "/campaign-management",
-  // },
-  // { icon: FileText, label: "Clause Management", href: "/clause-management" },
-  // { icon: Upload, label: "Upload Templates", href: "/upload-templates" },
-  // { icon: CheckSquare, label: "Approve Templates", href: "/approve-template" },
-  // {
-  //   icon: FileSpreadsheet,
-  //   label: "Template Management",
-  //   href: "/template-management",
-  // },
-  // { icon: BarChart2, label: "Report", href: "/report" },
-  // {
-  //   icon: Database,
-  //   label: "Content Management System",
-  //   href: "/content-management",
-  // },
-  // { icon: UserCog, label: "User Access Management", href: "/user-management" },
 ];
 
 const Sidebar = () => {
   const location = useLocation();
+
+  const isActive = (item: typeof menuItems[0]) => {
+    return item.matchRoutes.some((path) => location.pathname.startsWith(path));
+  };
+
   return (
     <SidebarComponent>
-      <SidebarContent className="bg-white ">
+      <SidebarContent className="bg-white">
         {/* Logo */}
         <div className="hidden md:flex justify-center items-center h-16 border-b">
-          <img src={logo} alt="Logo" className="h-10" />
+          <img src={logo} alt="Logo" className="h-15 " />
         </div>
+
         <SidebarGroup>
           <SidebarGroupContent>
-            <SidebarMenu>
-              {menuItems.map((item) => (
-                <SidebarMenuItem key={item.label}>
-                  <SidebarMenuButton asChild>
-                    <a
-                      href={item.href}
-                      className={`flex items-center gap-2 p-2 hover:bg-[#E7F5FF] rounded-md hover:text-[#00426E] text-base font-medium roboto-font ${
-                        location.pathname === item.href ||
-                        (item.href === "/personal" &&
-                          [
-                            "/create-case",
-                            "/personal-detail",
-                            "/engagement-letter",
-                            "/personal-create-document",
-                          ].some((prefix) =>
-                            location.pathname.startsWith(prefix)
-                          ))||(item.href === "/legacy-assurance-plan" &&
-                          [
-                            "/create-engagement-letter",
-                            "/create-document",
-                            "/legacy-assurance-plan-detail",
-                           
-                          ].some((prefix) =>
-                            location.pathname.startsWith(prefix)
-                          ))
-                          ? "bg-[#E7F5FF] text-[#00426E]"
-                          : "text-[#222B45]"
-                      }`}
-                    >
-                      <item.icon className="w-5 h-5" />
-                      <span>{item.label}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+            <SidebarMenu className="space-y-2"> {/* spacing between tabs */}
+              {menuItems.map((item) => {
+                const active = isActive(item);
+                return (
+                  <SidebarMenuItem key={item.label}>
+                    <SidebarMenuButton asChild>
+                      <Link
+                        to={item.href}
+                        className={`flex items-center gap-2 p-4 rounded-md text-base font-medium roboto-font transition-colors ${
+                          active
+                            ? "bg-[#E7F5FF] text-[#00426E]"
+                            : "text-[#222B45] hover:bg-[#E7F5FF] hover:text-[#00426E]"
+                        }`}
+                      >
+                        <img
+                          src={active ? item.icons.active : item.icons.inactive}
+                          alt={`${item.label} icon`}
+                          className="w-5 h-5"
+                        />
+                        <span>{item.label}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

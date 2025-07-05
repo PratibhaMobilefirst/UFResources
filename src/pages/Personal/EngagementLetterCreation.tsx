@@ -90,7 +90,7 @@ const stepTitles: Record<string, string> = {
 
  const renderReview = () => (
   <div className="flex justify-center">
-    <div className="bg-white max-w-[794px] min-h-full p-10 border border-gray-300 rounded shadow-md">
+    <div className="bg-white max-w-[800px] min-h-[700px] p-10 border border-gray-300 rounded shadow-md">
      
       <h3 className="text-lg font-bold mb-6">Engagement Letter</h3>
       <div className="space-y-6">
