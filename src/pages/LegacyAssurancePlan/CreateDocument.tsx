@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { ArrowLeft, FileText, ScrollText, Shield } from "lucide-react";
@@ -16,6 +16,7 @@ import { useAttorneyStates } from "@/hooks/useStates";
 import { useDocumentType } from "@/hooks/UseDocumentType";
 import BackArrow from "../../asset/img/Group 37878.svg"
 import TemplateList from "@/components/TemplateList";
+import DocumentEditor from "../Personal/DocumentEditor";
 const CreateDocument = () => {
   const [selectedState, setSelectedState] = useState("");
   const [selectedDocumentType, setSelectedDocumentType] = useState("");
@@ -50,16 +51,49 @@ const template = [
     icon: <Shield className="w-6 h-6" />,
   },
 ];
+  // const [selectedState, setSelectedState] = useState("");
+  const [selectedDocType, setSelectedDocType] = useState("");
+  const [showEditor, setShowEditor] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // When Next is clicked, open file dialog
   const handleNext = () => {
-    if (selectedState && selectedDocumentType) {
-      console.log("Creating document with:", {
-        state: selectedState,
-        documentType: selectedDocumentType,
-      });
-      // Navigate to the next step or create the document
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ""; // reset for re-selection
+      fileInputRef.current.click();
     }
   };
+
+  // When file is selected, show the editor
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedFile(file);
+      setShowEditor(true);
+    }
+  };
+
+  // If editor should be shown, render it
+  if (showEditor && selectedFile) {
+    return (
+      <DocumentEditor
+        onBack={() => setShowEditor(false)}
+        initialFile={selectedFile}
+      />
+    );
+  }
+
+
+  // const handleNext = () => {
+  //   if (selectedState && selectedDocumentType) {
+  //     console.log("Creating document with:", {
+  //       state: selectedState,
+  //       documentType: selectedDocumentType,
+  //     });
+  //     // Navigate to the next step or create the document
+  //   }
+  // };
 
   return (
     <Layout>
@@ -171,6 +205,13 @@ const template = [
                   >
                     Next
                   </Button>
+                  <input
+                  type="file"
+                  accept=".doc,.docx,.txt"
+                  ref={fileInputRef}
+                  style={{ display: "none" }}
+                  onChange={handleFileChange}
+                />
                 </div>
               </div>
             </CardContent>

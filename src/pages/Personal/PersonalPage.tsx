@@ -437,24 +437,27 @@ const PersonalPage = () => {
           <h1 className="text-2xl font-bold mb-6">Case</h1>
 
           <div className="flex flex-col md:flex-row justify-between mb-6 gap-4">
-            <Tabs
-              defaultValue="network-attorney"
-              value={currentTab}
-              onValueChange={(val) => setCurrentTab(val)}
-              className="w-full md:max-w-md"
-            >
-              <TabsList className="w-full bg-gray-100 p-0 h-auto">
-                <TabsTrigger
-                  value="network-attorney"
-                  className="flex-1 py-2"
-                >
-                  Active Classes
-                </TabsTrigger>
-                <TabsTrigger value="campaign" className="flex-1 py-2">
-                  Finished Classes
-                </TabsTrigger>
-              </TabsList>
-            </Tabs>
+                  <Tabs
+  defaultValue="network-attorney"
+  value={currentTab}
+  onValueChange={setCurrentTab}
+  className="w-full md:max-w-md"
+>
+  <TabsList className="w-full bg-gray-100 p-1 rounded-md flex border border-gray-300">
+    <TabsTrigger
+      value="network-attorney"
+      className="flex-1 py-2 text-sm font-medium data-[state=active]:bg-white data-[state=active]:text-[#00426E] data-[state=active]:font-bold rounded-md"
+    >
+      Active Cases
+    </TabsTrigger>
+    <TabsTrigger
+      value="campaign"
+      className="flex-1 py-2 text-sm font-medium data-[state=active]:bg-white data-[state=active]:text-[#00426E] data-[state=active]:font-bold rounded-md"
+    >
+      Finished Cases
+    </TabsTrigger>
+  </TabsList>
+</Tabs>
 
             <div>
               <Button
