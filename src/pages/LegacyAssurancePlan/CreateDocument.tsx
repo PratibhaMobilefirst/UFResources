@@ -28,29 +28,41 @@ const CreateDocument = () => {
     error: templateCardsError,
   } = useDocumentType(selectedState);
 
-  console.log(templateCardsData?.data?.data[0].documents, "templateCardsData");
+  console.log(templateCardsData?.data, "templateCardsData");
+  console.log("useAttorneyStates", data);
 
- 
-const template = [
-  {
-    id: "simple-will",
-    templateCardName: "Simple Will",
-    categories: [{ category: { templateName: "Will" } }],
-    icon: <FileText className="w-6 h-6" />,
-  },
-  {
-    id: "simplified-estate-planning",
-    templateCardName: "Simplified Estate Planning",
-    categories: [{ category: { templateName: "Estate" } }],
-    icon: <ScrollText className="w-6 h-6" />,
-  },
-  {
-    id: "power-of-attorney",
-    templateCardName: "Power of Attorney",
-    categories: [{ category: { templateName: "Legal" } }],
-    icon: <Shield className="w-6 h-6" />,
-  },
-];
+  const templateCardsDataV1: any = templateCardsData?.data?.map((items) => [{
+    id: items.id || "",
+    templateCardName: items.documentName || "",
+    categories: items?.categoryName || "N/A",
+    stateName: items?.stateName || "",
+
+  }]
+  )
+  console.log("templateCardsDataV1", templateCardsDataV1);
+
+
+
+  const template = [
+    {
+      id: "simple-will",
+      templateCardName: "Simple Will",
+      categories: [{ category: { templateName: "Will" } }],
+      icon: <FileText className="w-6 h-6" />,
+    },
+    {
+      id: "simplified-estate-planning",
+      templateCardName: "Simplified Estate Planning",
+      categories: [{ category: { templateName: "Estate" } }],
+      icon: <ScrollText className="w-6 h-6" />,
+    },
+    {
+      id: "power-of-attorney",
+      templateCardName: "Power of Attorney",
+      categories: [{ category: { templateName: "Legal" } }],
+      icon: <Shield className="w-6 h-6" />,
+    },
+  ];
   // const [selectedState, setSelectedState] = useState("");
   const [selectedDocType, setSelectedDocType] = useState("");
   const [showEditor, setShowEditor] = useState(false);
@@ -106,7 +118,7 @@ const template = [
                   className="flex items-center text-gray-600 hover:text-gray-800"
                   onClick={() => navigate(-1)}
                 >
-                    <img src={BackArrow} className="w-5 h-5" />
+                  <img src={BackArrow} className="w-5 h-5" />
                 </button>
                 <h1 className="text-xl font-semibold text-gray-900">
                   Create Document
@@ -126,7 +138,7 @@ const template = [
                   {/* State Selection */}
                   <div className="mb-8">
                     <label className="block text-sm font-medium text-gray-700 mb-3">
-                      Select State 
+                      Select State
                     </label>
                     <div className="max-w-xs">
                       <Select
@@ -164,9 +176,9 @@ const template = [
                           <SelectValue placeholder="Select Document type" />
                         </SelectTrigger>
                         <SelectContent>
-                          {template.map((type) => (
+                          {templateCardsData?.data?.map((type) => (
                             <SelectItem key={type.id} value={type.id}>
-                              {type.templateCardName}
+                              {type.documentName}
                             </SelectItem>
                           ))}
                         </SelectContent>
@@ -185,15 +197,15 @@ const template = [
                         />
                       ))}
                     </div>*/}
-                      <div className="p-5 bg-gray-50 border">
-                    <TemplateList
-                      templates={template}
-                      isLoading={false}
-                      isError={false} handleNavigate={function (id: string, templateData: any): void {
-                        throw new Error("Function not implemented.");
-                      } }               
-              /> </div>
-                  </div> 
+                    <div className="p-5 bg-gray-50 border">
+                      <TemplateList
+                        templates={templateCardsDataV1}
+                        isLoading={false}
+                        isError={false} handleNavigate={function (id: string, templateData: any): void {
+                          throw new Error("Function not implemented.");
+                        }}
+                      /> </div>
+                  </div>
                 </div>
 
                 {/* Next Button */}
@@ -206,12 +218,12 @@ const template = [
                     Next
                   </Button>
                   <input
-                  type="file"
-                  accept=".doc,.docx,.txt"
-                  ref={fileInputRef}
-                  style={{ display: "none" }}
-                  onChange={handleFileChange}
-                />
+                    type="file"
+                    accept=".doc,.docx,.txt"
+                    ref={fileInputRef}
+                    style={{ display: "none" }}
+                    onChange={handleFileChange}
+                  />
                 </div>
               </div>
             </CardContent>

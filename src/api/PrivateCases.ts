@@ -1,4 +1,5 @@
 import axiosInstance from "./axiosInstance";
+import axiosWithToken from "./axiosWithToken";
 
 export interface CaseData {
   id: string;
@@ -39,7 +40,7 @@ export interface PrivateCasesResponse {
 export const getPrivateCases = async (
   params: PrivateCasesParams
 ): Promise<PrivateCasesResponse> => {
-  const response = await axiosInstance.get("network-attorney/cases", {
+  const response = await axiosWithToken.get("network-attorney/cases", {
     params,
   });
   return response.data.data;

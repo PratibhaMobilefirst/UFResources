@@ -13,7 +13,7 @@ import AttorneyDetailPage from "./pages/Attorney Management/AttorneyDetailPage";
 import CaseDetailPage from "./pages/Attorney Management/CaseDetailPage";
 import ContentManagement from "./pages/ContentManagement/ContentManagement";
 import PrivateRoutes from "./utils/PrivateRoute";
-import LoginFormPage from "./pages/LoginFormPage";
+// import LoginFormPage from "./pages/LoginFormPage";
 import UserManagement from "./pages/UserManagement/UserManagement";
 import UserManagementForm from "./pages/UserManagement/UserManagementForm";
 import CreateRole from "./pages/UserManagement/CreateRole";
@@ -43,7 +43,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<LoginFormPage />} />
+          {/* <Route path="/" element={<LoginFormPage />} /> */}
           <Route path="/forgot-password" element={<ForgetPage />} />
           <Route path="/set-password" element={<NewPasswordPage />} />
           <Route path="/success-popup" element={<SuccessPopuppage />} />
@@ -65,10 +65,10 @@ const App = () => (
           <Route path="/personal" element={<PersonalPage />} />
           <Route path="/create-case" element={<CreateCase />} />
           <Route path="/personal-detail/:id" element={<PersonalDetailPage />} />
-            <Route path="/engagement-letter/:caseId" element={<EngagementLetterCreation />} />
-            <Route path="/personal-create-document" element={<CreateDocumentP />} />
-                   <Route path="/document-editor" element={<DocumentEditor />} />
-               
+          <Route path="/engagement-letter/:caseId" element={<EngagementLetterCreation />} />
+          <Route path="/personal-create-document" element={<CreateDocumentP />} />
+          <Route path="/document-editor" element={<DocumentEditor />} />
+
           <Route path="/attorney-detail/:id" element={<AttorneyDetailPage />} />
           <Route
             path="/attorney-case-detail/:attorneyId/:caseId"
@@ -76,7 +76,7 @@ const App = () => (
           />
           <Route path="/content-management" element={<ContentManagement />} />
           {/* <Route path="/user-management" element={<UserManagement />} /> */}
-          <Route path="/user-management" element={<LoginFormPage />} />
+          {/* <Route path="/user-management" element={<LoginFormPage />} /> */}
           <Route
             path="/user-management-form"
             element={<UserManagementForm />}

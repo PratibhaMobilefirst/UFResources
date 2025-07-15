@@ -20,6 +20,9 @@ const TemplateList = ({
     handleNavigate(id, templateData);
   };
 
+
+  console.log("Template console", templates);
+
   if (isLoading) {
     return (
       <div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-6 justify-items-center">
@@ -81,23 +84,22 @@ const TemplateList = ({
                   <div className="flex flex-wrap gap-1 mb-2">
                     {template.categories && template.categories.length > 0
                       ? template.categories.map(
-                          (categoryItem: any, index: number) => (
-                            <span
-                              key={index}
-                              className="inline-block px-2 py-1 text-xs font-medium rounded-full bg-[#D4EDFF] text-[#00426E]"
-                            >
-                              {categoryItem.category.templateName}
-                            </span>
-                          )
+                        (categoryItem: any, index: number) => (
+                          <span
+                            key={index}
+                            className="inline-block px-2 py-1 text-xs font-medium rounded-full bg-[#D4EDFF] text-[#00426E]"
+                          >
+                            {categoryItem.category.templateName}
+                          </span>
                         )
+                      )
                       : null}
                   </div>
                   <h3
-                    className={`font-semibold text-black text-[18px] ${
-                      !template.categories || template.categories.length === 0
-                        ? "line-clamp-2"
-                        : "line-clamp-1"
-                    }`}
+                    className={`font-semibold text-black text-[18px] ${!template.categories || template.categories.length === 0
+                      ? "line-clamp-2"
+                      : "line-clamp-1"
+                      }`}
                     title={template.templateCardName}
                   >
                     {template.templateCardName}
