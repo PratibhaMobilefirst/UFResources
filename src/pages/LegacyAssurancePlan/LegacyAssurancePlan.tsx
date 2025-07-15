@@ -290,7 +290,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search } from "lucide-react";
+import { CalendarIcon, Search } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -312,6 +312,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import  CalendarImg  from "../../asset/img/lets-icons_date-fill.svg";
 const LegacyAssurancePlanPage = () => {
   const [currentTab, setCurrentTab] = useState("network-attorney");
   const [currentPage, setCurrentPage] = useState(1);
@@ -377,59 +378,86 @@ const navigate = useNavigate();
 
          <div className="flex flex-wrap md:flex-nowrap items-end gap-4 mb-6">
   {/* Search Box */}
-  <div className="flex gap-2 w-full md:w-1/4">
+  {/* <div className="flex gap-2 w-full md:w-1/4">
     <div className="relative w-full">
       <Input type="text" placeholder="Search by document name" />
       <Search className="absolute right-3 top-3 h-4 w-4 text-gray-400" />
     </div>
     <Button className="bg-[#00426E] hover:bg-[#003058]">Search</Button>
-  </div>
+  </div> */}
+ {/* Row 1: Search Input + Button */}
+            <div className="flex gap-4 ">
+              <div className="flex w-[45%] gap-0.5" >
+                <input
+                  type="text"
+                  placeholder="Search by Attorney Name"
+                  className="px-3 py-2 border border-[#D8D8D8] rounded-l-md flex-1 focus:outline-none focus:ring-2 focus:ring-[#00426E]"
+                 
+                />
+                <Button
+                  variant="default"
+                  className="bg-[#00426E] hover:bg-[#003355] text-white rounded-r-md rounded-l-none"
+                 
+                >
+                  Search
+                </Button>
+              </div>
+            </div>
+  
 
-  {/* Start Date Picker */}
-  <div className="w-full md:w-1/4">
-    <label className="text-sm font-medium mb-1 block">Start Date</label>
-    <Popover>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          className="w-full justify-start text-left font-normal"
-        >
-          {startDate ? format(startDate, "yyyy-MM-dd") : "Pick a start date"}
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-auto p-0">
-        <Calendar
-          mode="single"
-          selected={startDate}
-          onSelect={setStartDate}
-          initialFocus
-        />
-      </PopoverContent>
-    </Popover>
-  </div>
+{/* Start Date Picker */}
+<div className="w-full md:w-1/4">
+  <label className="text-sm font-medium mb-1 block">Start Date</label>
+  <Popover>
+    <PopoverTrigger asChild>
+      <Button
+        variant="outline"
+        className="w-full justify-start text-left font-normal relative pr-10"
+      >
+        {startDate ? format(startDate, "yyyy-MM-dd") : "Pick a start date"}
+        {/* Calendar icon */}
+        <img src={CalendarImg} className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500 pointer-events-none" />
+      </Button>
+    </PopoverTrigger>
+    <PopoverContent className="w-auto p-0">
+      <Calendar
+        mode="single"
+        selected={startDate}
+        onSelect={setStartDate}
+        initialFocus
+      />
+    </PopoverContent>
+  </Popover>
+</div>
 
-  {/* End Date Picker */}
-  <div className="w-full md:w-1/4">
-    <label className="text-sm font-medium mb-1 block">End Date</label>
-    <Popover>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          className="w-full justify-start text-left font-normal"
-        >
-          {endDate ? format(endDate, "yyyy-MM-dd") : "Pick an end date"}
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-auto p-0">
-        <Calendar
-          mode="single"
-          selected={endDate}
-          onSelect={setEndDate}
-          initialFocus
-        />
-      </PopoverContent>
-    </Popover>
-  </div>
+
+
+{/* End Date Picker */}
+<div className="w-full md:w-1/4">
+  <label className="text-sm font-medium mb-1 block">End Date</label>
+  <Popover>
+    <PopoverTrigger asChild>
+      <Button
+        variant="outline"
+        className="w-full justify-start text-left font-normal relative pr-10"
+      >
+        {endDate ? format(endDate, "yyyy-MM-dd") : "Pick an end date"}
+
+        {/* Calendar icon */}
+        <img src={CalendarImg} className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500 pointer-events-none" />
+      </Button>
+    </PopoverTrigger>
+    <PopoverContent className="w-auto p-0">
+      <Calendar
+        mode="single"
+        selected={endDate}
+        onSelect={setEndDate}
+        initialFocus
+      />
+    </PopoverContent>
+  </Popover>
+</div>
+
 
   {/* State Dropdown */}
   <div className="w-full md:w-1/4 flex flex-col" data-tour="state-filter">

@@ -97,7 +97,7 @@ const template = [
 
   return (
     <Layout>
-      <div className="p-8">
+      <div className="">
         <div className="max-w-7xl mx-auto">
           <Card className="w-full">
             <CardHeader className="pb-4">

@@ -112,55 +112,60 @@ export function DocumentContent({
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <Button variant="ghost" size="sm" onClick={() => navigate(-1)}>
-            <img src={BackArrow} alt="img" className="w-6 h-6" />
-          </Button>
-          <h2 className="text-2xl font-semibold">
-            {data?.data?.attorney?.firstName || "N/A"}
-          </h2>
-          <Badge
-            variant="secondary"
-             className={`px-4 py-2 text-sm font-medium rounded-full transition ${
+        <div className="flex items-center justify-between w-full">
+  {/* Left side: Back button and name */}
+  <div className="flex items-center gap-4">
+    <Button variant="ghost" size="sm" onClick={() => navigate(-1)}>
+      <img src={BackArrow} alt="img" className="w-6 h-6" />
+    </Button>
+    <h2 className="text-2xl font-semibold">
+      {data?.data?.attorney?.firstName || "N/A"}
+    </h2>
+  </div>
+
+  {/* Right side: Active/Inactive badge */}
+ {!showEngagementLetter && (
+  <Badge
+    variant="secondary"
+    className={`px-4 py-2 text-sm font-medium rounded-full transition ${
       data?.data?.isActive
         ? "bg-[#00426E] text-white"
         : "text-gray-500 hover:bg-gray-200"
     }`}
-          >
-            {data?.data?.isActive ? "Active" : "Inactive"}
-          </Badge>
-        </div>
-       <div className="flex flex-col md:flex-row justify-between mb-6 gap-4">
-  <Tabs
-    defaultValue="network-attorney"
-    value={currentTab}
-    onValueChange={(val) => setCurrentTab(val)}
-    className="w-full md:max-w-md"
   >
-    <TabsList className="w-full bg-gray-100 rounded-full p-1 h-auto flex">
-      <TabsTrigger
-        value="network-attorney"
-        className={`flex-1 rounded-full px-4 py-2 text-sm font-medium transition ${
-          currentTab === "network-attorney"
+    {data?.data?.isActive ? "Active" : "Inactive"}
+  </Badge>
+)}
+</div>
+
+{showEngagementLetter && (
+  <div className="flex flex-col md:flex-row justify-between mb-6 gap-4">
+    <div className="w-full max-w-[300px] h-[43px] bg-[#F2F2F2] rounded-full px-2 py-1 flex">
+      <div
+        className={`flex-1 h-full px-2 rounded-full text-sm font-medium flex items-center justify-center whitespace-nowrap transition ${
+          data?.data?.isActive
             ? "bg-[#00426E] text-white"
-            : "text-gray-700 hover:bg-gray-200"
+            : "text-gray-500"
         }`}
       >
         Mark as Active
-      </TabsTrigger>
-      <TabsTrigger
-        value="campaign"
-        className={`flex-1 rounded-full px-4 py-2 text-sm font-medium transition ${
-          currentTab === "campaign"
+      </div>
+      <div
+        className={`flex-1 h-full px-2 rounded-full text-sm font-medium flex items-center justify-center whitespace-nowrap transition ${
+          !data?.data?.isActive
             ? "bg-[#00426E] text-white"
-            : "text-gray-700 hover:bg-gray-200"
+            : "text-gray-500"
         }`}
       >
         Mark as Finished
-      </TabsTrigger>
-    </TabsList>
-  </Tabs>
-</div>
+      </div>
+    </div>
+  </div>
+)}
+
+
+
+
 
       </div>
 
@@ -186,7 +191,7 @@ export function DocumentContent({
 
       {/* Engagement Letter Section */}
 
-      {/* {showEngagementLetter && ( */}
+      {showEngagementLetter && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-semibold">Engagement Letter</h3>
@@ -215,7 +220,7 @@ export function DocumentContent({
             </div>
           )}
         </div>
-      {/* )} */}
+      )}
 
       {/* Document Section */}
       <div className="space-y-4">
