@@ -46,7 +46,6 @@
 //   );
 // }
 
-
 import {
   Table,
   TableBody,
@@ -57,7 +56,12 @@ import {
 } from "@/components/ui/table";
 import { useState } from "react";
 import { Eye } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface Column {
   key: string;
@@ -73,7 +77,7 @@ export function CustomTable({ columns, data }: CustomTableProps) {
   const [previewData, setPreviewData] = useState<string | null>(null);
 
   const handlePreview = (row: Record<string, any>) => {
-    setPreviewData(row.preview); // assume 'preview' is a key with document content
+    // setPreviewData(row.preview); // assume 'preview' is a key with document content
   };
 
   const closePreview = () => {
@@ -87,11 +91,16 @@ export function CustomTable({ columns, data }: CustomTableProps) {
           <TableHeader>
             <TableRow className="bg-muted/50">
               {columns.map((column) => (
-                <TableHead key={column.key} className="font-medium text-blue-600">
+                <TableHead
+                  key={column.key}
+                  className="font-medium text-blue-600"
+                >
                   {column.label}
                 </TableHead>
               ))}
-              <TableHead className="text-center font-medium text-blue-600">Preview</TableHead>
+              <TableHead className="text-center font-medium text-blue-600">
+                Preview
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -119,9 +128,7 @@ export function CustomTable({ columns, data }: CustomTableProps) {
           <DialogHeader>
             <DialogTitle>Engagement Letter</DialogTitle>
           </DialogHeader>
-          <div className="text-sm whitespace-pre-line px-1">
-            {previewData}
-          </div>
+          <div className="text-sm whitespace-pre-line px-1">{previewData}</div>
         </DialogContent>
       </Dialog>
     </>

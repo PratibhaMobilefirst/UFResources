@@ -1,25 +1,3 @@
-// import { Bell, User } from "lucide-react";
-
-// const Header = () => {
-//   return (
-//     <header className="h-16 border-b bg-white flex items-center justify-between px-6">
-//       <div className="flex items-center gap-2">
-//         {/* <img
-//           src="/lovable-uploads/Logo.svg"
-//           alt="Legacy Logo"
-//           className="h-8"
-//         /> */}
-//       </div>
-//       <div className="flex items-center gap-4">
-//         <Bell className="w-5 h-5 text-gray-500" />
-//         <User className="w-5 h-5 text-gray-500" />
-//       </div>
-//     </header>
-//   );
-// };
-
-// export default Header;
-// import { Bell, User } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -35,15 +13,11 @@ import Logo from "../asset/img/Logomain.svg";
 import { ChevronLeft, HelpCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-
 const Header = () => {
- 
   const { toast } = useToast();
   const { state: sidebarOpen, toggleSidebar } = useSidebar();
 
-
   const handleLogout = () => {
-   
     localStorage.removeItem("auth-store");
     sessionStorage.removeItem("auth-store");
 
@@ -58,12 +32,12 @@ const Header = () => {
     // Add any additional logic for redirection, e.g., using React Router
   };
 
-
-
   return (
     <header className="h-16 border-b bg-white flex items-center justify-between px-6 z-100">
       <div className="flex-1 flex items-center gap-2">
-        <h1 className="text-[#00426E] text-[26px] font-[500]">Document Assembly Service</h1>
+        <h1 className="text-[#00426E] text-[26px] font-[500]">
+          Document Assembly Service
+        </h1>
         {/* Sidebar toggle button */}
         {/* <Button
           variant="ghost"
@@ -90,13 +64,9 @@ const Header = () => {
           />
         </div> */}
       </div>
-      <div className="flex items-center gap-4">
-      
-
-        {/* Notifications */}
+      {/* <div className="flex items-center gap-4">
         <img src={Bell} alt="Bell" />
 
-        {/* User icon dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger>
             <img src={User_icon} alt="user" />
@@ -105,12 +75,9 @@ const Header = () => {
             <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
               Log Out
             </DropdownMenuItem>
-            {/* <DropdownMenuItem onClick={handleRestartTour} className="cursor-pointer">
-              Restart Tour
-            </DropdownMenuItem> */}
           </DropdownMenuContent>
         </DropdownMenu>
-      </div>
+      </div> */}
     </header>
   );
 };

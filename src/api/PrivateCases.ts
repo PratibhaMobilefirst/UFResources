@@ -59,7 +59,7 @@ export const getCaseDetails = async ({
   page,
   limit,
 }: CaseDetails): Promise<PrivateCasesResponse> => {
-  const response = await axiosInstance.get(`/network-attorney/case-details`, {
+  const response = await axiosWithToken.get(`/network-attorney/case-details`, {
     params: {
       attorneyId: attorneyId,
       caseId: caseId,

@@ -26,7 +26,7 @@ export function LegacyAssuranceDetail() {
     if (data?.data?.meta?.totalPages) {
       setTotalPages(data?.data?.meta?.totalPages);
     }
-  }, [data]);
+  }, [data?.data]);
 
   const handleNavigateEngagementLetter = () => {
     navigate("/create-engagement-letter");
@@ -42,7 +42,7 @@ export function LegacyAssuranceDetail() {
       <div className="container mx-auto p-6 max-w-full bg-white">
         <div className="flex-1 p-6">
           <DocumentContent
-            data={data}
+            data={data?.data}
             showEngagementLetter={false}
             handleNavigateEngagementLetter={handleNavigateEngagementLetter}
             handleNavigateDocument={handleNavigateDocument}

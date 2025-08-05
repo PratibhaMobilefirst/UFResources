@@ -14,8 +14,9 @@ import {
 } from "@/components/ui/pagination";
 import { useNavigate } from "react-router-dom";
 import { formatDate } from "@/utils/dateFormat";
-import { useState } from "react";
-import BackArrow from "../asset/img/Group 37878.svg"
+import { useEffect, useState } from "react";
+import BackArrow from "../asset/img/Group 37878.svg";
+import { usePersonalToggleStatus } from "@/hooks/UsePersonal";
 interface DocumentContentProps {
   data: any;
   showEngagementLetter?: boolean;
@@ -24,7 +25,8 @@ interface DocumentContentProps {
   onPageChange: (page: number) => void;
   handleNavigateEngagementLetter?: () => void;
   handleNavigateDocument?: () => void;
- 
+  caseId?: string | null;
+  refetch?: () => void;
 }
 
 export function DocumentContent({
@@ -35,10 +37,21 @@ export function DocumentContent({
   onPageChange,
   handleNavigateEngagementLetter,
   handleNavigateDocument,
- 
+  caseId,
+  refetch,
 }: DocumentContentProps) {
   const navigate = useNavigate();
-  const [currentTab, setCurrentTab] = useState("network-attorney");
+  console.log({ caseId }, "caseId");
+
+  const [loadingTab, setLoadingTab] = useState<string | null>(null);
+  const [tabValue, setTabValue] = useState(
+    data?.data?.isActive ? "active" : "finished"
+  );
+
+  useEffect(() => {
+    // Keep in sync if API updates from outside
+    setTabValue(data?.data?.isActive ? "active" : "finished");
+  }, [data?.data?.isActive]);
 
   const engagementColumns = [
     { key: "sno", label: "S.no" },
@@ -108,65 +121,148 @@ export function DocumentContent({
       ),
     })) || [];
 
+  console.log({ engagementData, documentData }, "engagementData, documentData");
+  const { mutate: toggleStatus, isPending } = usePersonalToggleStatus();
+
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center justify-between w-full">
-  {/* Left side: Back button and name */}
-  <div className="flex items-center gap-4">
-    <Button variant="ghost" size="sm" onClick={() => navigate(-1)}>
-      <img src={BackArrow} alt="img" className="w-6 h-6" />
-    </Button>
-    <h2 className="text-2xl font-semibold">
-      {data?.data?.attorney?.firstName || "N/A"}
-    </h2>
-  </div>
+          {/* Left side: Back button and name */}
+          <div className="flex items-center gap-4">
+            <Button variant="ghost" size="sm" onClick={() => navigate(-1)}>
+              <img src={BackArrow} alt="img" className="w-6 h-6" />
+            </Button>
+            <h2 className="text-2xl font-semibold">
+              {data?.data?.attorney?.firstName || "N/A"}
+            </h2>
+          </div>
 
-  {/* Right side: Active/Inactive badge */}
- {!showEngagementLetter && (
-  <Badge
-    variant="secondary"
-    className={`px-4 py-2 text-sm font-medium rounded-full transition ${
-      data?.data?.isActive
-        ? "bg-[#00426E] text-white"
-        : "text-gray-500 hover:bg-gray-200"
-    }`}
-  >
-    {data?.data?.isActive ? "Active" : "Inactive"}
-  </Badge>
-)}
-</div>
+          {/* Right side: Active/Inactive badge */}
+          {!showEngagementLetter && (
+            <Badge
+              variant="secondary"
+              className={`px-4 py-2 text-sm font-medium rounded-full transition ${
+                data?.data?.isActive
+                  ? "bg-[#00426E] text-white"
+                  : "text-gray-500 hover:bg-gray-200"
+              }`}
+            >
+              {data?.data?.isActive ? "Active" : "Inactive"}
+            </Badge>
+          )}
+        </div>
 
-{showEngagementLetter && (
-  <div className="flex flex-col md:flex-row justify-between mb-6 gap-4">
-    <div className="w-full max-w-[300px] h-[43px] bg-[#F2F2F2] rounded-full px-2 py-1 flex">
-      <div
-        className={`flex-1 h-full px-2 rounded-full text-sm font-medium flex items-center justify-center whitespace-nowrap transition ${
-          data?.data?.isActive
-            ? "bg-[#00426E] text-white"
-            : "text-gray-500"
-        }`}
-      >
-        Mark as Active
-      </div>
-      <div
-        className={`flex-1 h-full px-2 rounded-full text-sm font-medium flex items-center justify-center whitespace-nowrap transition ${
-          !data?.data?.isActive
-            ? "bg-[#00426E] text-white"
-            : "text-gray-500"
-        }`}
-      >
-        Mark as Finished
-      </div>
-    </div>
-  </div>
-)}
+        {/* {showEngagementLetter && (
+          <div className="flex flex-col md:flex-row justify-between mb-6 gap-4">
+            <div className="w-full max-w-[300px] h-[43px] bg-[#F2F2F2] rounded-full px-2 py-1 flex">
+              <button
+                onClick={handleToggleStatus}
+                className={`flex-1 h-full px-2 rounded-full text-sm font-medium flex items-center justify-center whitespace-nowrap transition ${
+                  data?.data?.isActive
+                    ? "bg-[#00426E] text-white"
+                    : "text-gray-500"
+                }`}
+              >
+                {isPending ? "Updating..." : "Mark as Active"}
+              </button>
+              <button
+                onClick={handleToggleStatus}
+                className={`flex-1 h-full px-2 rounded-full text-sm font-medium flex items-center justify-center whitespace-nowrap transition ${
+                  !data?.data?.isActive
+                    ? "bg-[#00426E] text-white"
+                    : "text-gray-500"
+                }`}
+              >
+                {isPending ? "Updating..." : "Mark as Finished"}
+              </button>
+            </div>
+          </div>
+        )} */}
 
-
-
-
-
+        {/* {showEngagementLetter && (
+          <div className="flex flex-col md:flex-row justify-between mb-6 gap-4">
+            <Tabs
+              value={data?.data?.isActive ? "active" : "finished"}
+              onValueChange={(value) => {
+                if (
+                  (value === "active" && !data?.data?.isActive) ||
+                  (value === "finished" && data?.data?.isActive)
+                ) {
+                  setLoadingTab(value);
+                  toggleStatus(caseId, {
+                    onSettled: () => setLoadingTab(null),
+                  });
+                }
+              }}
+              className="w-full max-w-[320px]"
+            >
+              <TabsList className="grid w-full grid-cols-2 bg-[#E5E7EB] rounded-full px-1  shadow-sm">
+                <TabsTrigger
+                  value="active"
+                  className="rounded-full text-sm font-semibold px-4 py-2 
+                     transition-all data-[state=active]:bg-[#00426E] 
+                     data-[state=active]:text-white data-[state=active]:shadow-sm"
+                >
+                  {loadingTab === "active" ? "Updating..." : "Mark as Active"}
+                </TabsTrigger>
+                <TabsTrigger
+                  value="finished"
+                  className="rounded-full text-sm font-semibold px-4 py-2 
+                     transition-all data-[state=active]:bg-[#00426E] 
+                     data-[state=active]:text-white data-[state=active]:shadow-sm"
+                >
+                  {loadingTab === "finished"
+                    ? "Updating..."
+                    : "Mark as Finished"}
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
+          </div>
+        )} */}
+        {showEngagementLetter && (
+          <div className="flex flex-col md:flex-row justify-between mb-6 gap-4">
+            <Tabs
+              value={tabValue}
+              onValueChange={(value) => {
+                if (value !== tabValue) {
+                  // ✅ Prevent double call
+                  setTabValue(value); // Optimistic UI update
+                  setLoadingTab(value);
+                  toggleStatus(caseId, {
+                    onSettled: () => setLoadingTab(null),
+                    onSuccess: () => {
+                      refetch?.(); // Refetch data after status change
+                    },
+                  });
+                }
+              }}
+              className="w-full max-w-[320px]"
+            >
+              <TabsList className="grid w-full grid-cols-2 bg-[#E5E7EB] rounded-full px-1 shadow-sm">
+                <TabsTrigger
+                  value="active"
+                  className="rounded-full text-sm font-semibold px-4 py-2 transition-all 
+                     data-[state=active]:bg-[#00426E] data-[state=active]:text-white 
+                     data-[state=active]:shadow-sm"
+                >
+                  {loadingTab === "active" ? "Updating..." : "Mark as Active"}
+                </TabsTrigger>
+                <TabsTrigger
+                  value="finished"
+                  className="rounded-full text-sm font-semibold px-4 py-2 transition-all 
+                     data-[state=active]:bg-[#00426E] data-[state=active]:text-white 
+                     data-[state=active]:shadow-sm"
+                >
+                  {loadingTab === "finished"
+                    ? "Updating..."
+                    : "Mark as Finished"}
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
+          </div>
+        )}
       </div>
 
       {/* Case Information */}
@@ -226,20 +322,20 @@ export function DocumentContent({
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-semibold">Document</h3>
-           <div className="flex gap-2">
-          <Button
-            className="bg-[#00426E] hover:bg-[#003058]"
-            onClick={() => handleNavigateDocument()}
-          >
-            Create Document
-          </Button>
-           {/* <Button
+          <div className="flex gap-2">
+            <Button
+              className="bg-[#00426E] hover:bg-[#003058]"
+              onClick={() => handleNavigateDocument()}
+            >
+              Create Document
+            </Button>
+            {/* <Button
                 variant="outline"
                 className="bg-[#00426E] text-white hover:bg-[#0030589f]"
               >
                 <Upload className="w-4 h-4 mr-2" /> Upload
               </Button> */}
-              </div>
+          </div>
         </div>
         {documentData.length > 0 ? (
           <CustomTable columns={documentColumns} data={documentData} />

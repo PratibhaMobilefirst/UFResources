@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import NewPasswordPage from "./pages/NewPasswordPage";
@@ -44,6 +44,10 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           {/* <Route path="/" element={<LoginFormPage />} /> */}
+          <Route
+            path="/"
+            element={<Navigate to="/legacy-assurance-plan" replace />}
+          />
           <Route path="/forgot-password" element={<ForgetPage />} />
           <Route path="/set-password" element={<NewPasswordPage />} />
           <Route path="/success-popup" element={<SuccessPopuppage />} />
@@ -65,8 +69,14 @@ const App = () => (
           <Route path="/personal" element={<PersonalPage />} />
           <Route path="/create-case" element={<CreateCase />} />
           <Route path="/personal-detail/:id" element={<PersonalDetailPage />} />
-          <Route path="/engagement-letter/:caseId" element={<EngagementLetterCreation />} />
-          <Route path="/personal-create-document" element={<CreateDocumentP />} />
+          <Route
+            path="/engagement-letter/:caseId"
+            element={<EngagementLetterCreation />}
+          />
+          <Route
+            path="/personal-create-document"
+            element={<CreateDocumentP />}
+          />
           <Route path="/document-editor" element={<DocumentEditor />} />
 
           <Route path="/attorney-detail/:id" element={<AttorneyDetailPage />} />
