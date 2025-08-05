@@ -31,14 +31,19 @@ const CreateDocument = () => {
   console.log(templateCardsData?.data, "templateCardsData");
   console.log("useAttorneyStates", data);
 
-  const templateCardsDataV1: any = templateCardsData?.data?.map((items) => [{
-    id: items.id || "",
-    templateCardName: items.documentName || "",
-    categories: items?.categoryName || "N/A",
-    stateName: items?.stateName || "",
+  const templateCardsDataV1: any[] = templateCardsData?.data?.map((item) => ({
+    id: item.id || "",
+    templateCardName: item.documentName || "",
+    categories: [
+      {
+        category: {
+          templateName: item.categoryName || "N/A",
+        },
+      },
+    ],
+    stateName: item.stateName || "",
+  })) || [];
 
-  }]
-  )
   console.log("templateCardsDataV1", templateCardsDataV1);
 
 
@@ -143,7 +148,12 @@ const CreateDocument = () => {
                     <div className="max-w-xs">
                       <Select
                         value={selectedState}
-                        onValueChange={setSelectedState}
+                        // onValueChange={setSelectedState}
+                        onValueChange={(newState) => {
+                          setSelectedState(newState);
+                          setSelectedDocumentType("all"); // ✅ Reset to "All"
+                        }}
+
                       >
                         <SelectTrigger className="w-full">
                           <SelectValue placeholder="Select State" />
@@ -176,6 +186,7 @@ const CreateDocument = () => {
                           <SelectValue placeholder="Select Document type" />
                         </SelectTrigger>
                         <SelectContent>
+                          <SelectItem value="all">All</SelectItem>
                           {templateCardsData?.data?.map((type) => (
                             <SelectItem key={type.id} value={type.id}>
                               {type.documentName}
@@ -199,7 +210,14 @@ const CreateDocument = () => {
                     </div>*/}
                     <div className="p-5 bg-gray-50 border">
                       <TemplateList
-                        templates={templateCardsDataV1}
+                        // templates={templateCardsDataV1}
+                        templates={
+                          !selectedDocumentType || selectedDocumentType === "all"
+                            ? templateCardsDataV1
+                            : templateCardsDataV1.filter(
+                              (template) => template.id === selectedDocumentType
+                            )
+                        }
                         isLoading={false}
                         isError={false} handleNavigate={function (id: string, templateData: any): void {
                           throw new Error("Function not implemented.");
