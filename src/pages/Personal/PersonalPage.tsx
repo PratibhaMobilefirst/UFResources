@@ -4,7 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search } from "lucide-react";
+import { Loader, Loader2, Search } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { debounce } from "lodash";
 import {
@@ -318,9 +318,14 @@ const PersonalPage = () => {
               </Select>
             </div>
           </div>
+          {isLoading && (
+            <div className="flex justify-center py-6">
+              <Loader2 className="animate-spin h-6 w-6 text-gray-500" />
+            </div>
+          )}
 
           {/* List */}
-          {templates.length > 0 ? (
+          {!isLoading && templates.length > 0 ? (
             <TemplateList
               templates={templates}
               isLoading={isLoading}
@@ -328,7 +333,8 @@ const PersonalPage = () => {
               handleNavigate={handleNavigate}
             />
           ) : (
-            !isLoading && (
+            !isLoading &&
+            templates.length > 0 && (
               <div className="text-center py-6 text-gray-500">
                 No cases found.
               </div>
