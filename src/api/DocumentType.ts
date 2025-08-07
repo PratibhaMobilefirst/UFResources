@@ -40,3 +40,12 @@ export const getTemplateCardsByState = async (
   );
   return response.data;
 };
+
+export const getTemplateCardsByStatePersonal = async (
+  stateId: string
+): Promise<TemplateCardsResponse> => {
+  const response = await axiosWithToken.get<TemplateCardsResponse>(
+    `/private-attorney/private-template-cards-by-state?stateId=${stateId}`
+  );
+  return response.data;
+};

@@ -19,8 +19,8 @@ import {
 } from "@/hooks/UseDocumentType";
 import BackArrow from "../../asset/img/Group 37878.svg";
 import TemplateList from "@/components/TemplateList";
-import DocumentEditor from "../Personal/DocumentEditor";
-const CreateDocumentPersonal = () => {
+import DocumentEditor from "./DocumentEditor";
+const EditDocumentPersonal = () => {
   const [selectedState, setSelectedState] = useState("");
   const [selectedDocumentType, setSelectedDocumentType] = useState("");
   const navigate = useNavigate();
@@ -259,4 +259,4 @@ const CreateDocumentPersonal = () => {
   );
 };
 
-export default CreateDocumentPersonal;
+export default EditDocumentPersonal;

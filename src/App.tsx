@@ -34,6 +34,8 @@ import CreateCase from "./pages/Personal/CreateCase";
 import DocumentEditor from "./pages/Personal/DocumentEditor";
 import EngagementLetterCreation from "./pages/Personal/EngagementLetterCreation";
 import CreateDocumentP from "./pages/Personal/CreateDocumentP";
+import CreateDocumentPersonal from "./pages/Personal/CreateDocumentP";
+import EditDocumentPersonal from "./pages/Personal/EditDocumentPersonal";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -75,7 +77,11 @@ const App = () => (
           />
           <Route
             path="/personal-create-document"
-            element={<CreateDocumentP />}
+            element={<CreateDocumentPersonal />}
+          />
+          <Route
+            path="/personal-edit-document/:id"
+            element={<EditDocumentPersonal />}
           />
           <Route path="/document-editor" element={<DocumentEditor />} />
 

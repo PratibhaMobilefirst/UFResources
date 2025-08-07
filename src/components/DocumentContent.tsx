@@ -60,7 +60,7 @@ export function DocumentContent({
     { key: "lastModified", label: "Last Modified" },
     { key: "status", label: "Status" },
     { key: "signingStatus", label: "Signing Status" },
-    { key: "preview", label: "Preview" },
+    // { key: "preview", label: "Preview" },
     { key: "modify", label: "Modify" },
     { key: "export", label: "Export" },
   ];
@@ -95,7 +95,7 @@ export function DocumentContent({
     { key: "caseName", label: "Case Name" },
     { key: "lastUpdated", label: "Last Updated" },
     { key: "documentStatus", label: "Document Status" },
-    { key: "preview", label: "Preview" },
+    // { key: "preview", label: "Preview" },
     { key: "editDocument", label: "Edit Document" },
   ];
 
