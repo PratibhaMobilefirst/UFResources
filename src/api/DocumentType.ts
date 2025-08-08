@@ -40,6 +40,12 @@ export const getTemplateCardsByState = async (
   );
   return response.data;
 };
+export const fetchEditDocument = async (templateDocumentId: string) => {
+  const response = await axiosWithToken.get(
+    `/private-attorney/private-get-edit-document?documentId=${templateDocumentId}`
+  );
+  return response.data;
+};
 
 export const getTemplateCardsByStatePersonal = async (
   stateId: string
@@ -48,4 +54,11 @@ export const getTemplateCardsByStatePersonal = async (
     `/private-attorney/private-template-cards-by-state?stateId=${stateId}`
   );
   return response.data;
+};
+
+export const fetchPrivateEditDocument = async (documentId: string) => {
+  const res = await axiosWithToken.get(
+    `/private-attorney/private-get-edit-document?documentId=${documentId}`
+  );
+  return res.data;
 };

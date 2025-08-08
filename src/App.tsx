@@ -36,6 +36,7 @@ import EngagementLetterCreation from "./pages/Personal/EngagementLetterCreation"
 import CreateDocumentP from "./pages/Personal/CreateDocumentP";
 import CreateDocumentPersonal from "./pages/Personal/CreateDocumentP";
 import EditDocumentPersonal from "./pages/Personal/EditDocumentPersonal";
+import EditDocument from "./pages/LegacyAssurancePlan/EditDocument";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -64,6 +65,7 @@ const App = () => (
             element={<CreateEngagementLetter />}
           />
           <Route path="/create-document" element={<CreateDocument />} />
+          <Route path="/edit-document/:id" element={<EditDocument />} />
           <Route
             path="/legacy-assurance-plan-detail/:id"
             element={<LegacyAssuranceDetail />}

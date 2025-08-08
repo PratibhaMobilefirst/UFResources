@@ -188,3 +188,39 @@ export const PersonaltoggleStatus = async (caseId: string) => {
   );
   return data;
 };
+
+export const downloadPersonalDocument = async (documentId: string) => {
+  try {
+    const response = await axiosWithToken.get(
+      `/private-attorney/export-document`,
+      {
+        params: { documentId },
+        responseType: "blob", // Ensure binary download
+      }
+    );
+
+    // Try to extract filename from content-disposition header
+    const contentDisposition = response.headers["content-disposition"];
+    let filename = "downloaded-document";
+
+    if (contentDisposition) {
+      const match = contentDisposition.match(/filename="(.+?)"/);
+      if (match && match[1]) {
+        filename = match[1];
+      }
+    }
+
+    // Create blob URL and trigger download
+    const blobUrl = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement("a");
+    link.href = blobUrl;
+    link.setAttribute("download", filename); // filename will have correct extension from header
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(blobUrl);
+  } catch (error) {
+    console.error("Failed to download document", error);
+    alert("Failed to download document. Please try again.");
+  }
+};

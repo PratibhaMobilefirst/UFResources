@@ -17,6 +17,7 @@ import { formatDate } from "@/utils/dateFormat";
 import { useEffect, useState } from "react";
 import BackArrow from "../asset/img/Group 37878.svg";
 import { usePersonalToggleStatus } from "@/hooks/UsePersonal";
+import { Document, downloadPersonalDocument } from "./../api/Personal";
 interface DocumentContentProps {
   data: any;
   showEngagementLetter?: boolean;
@@ -27,6 +28,8 @@ interface DocumentContentProps {
   handleNavigateDocument?: () => void;
   caseId?: string | null;
   refetch?: () => void;
+  handlePreview?: (documentId: string) => void;
+  handleEditDocument?: (documentId: string) => void;
 }
 
 export function DocumentContent({
@@ -39,6 +42,8 @@ export function DocumentContent({
   handleNavigateDocument,
   caseId,
   refetch,
+  handlePreview,
+  handleEditDocument,
 }: DocumentContentProps) {
   const navigate = useNavigate();
   console.log({ caseId }, "caseId");
@@ -67,6 +72,7 @@ export function DocumentContent({
 
   const engagementData =
     data?.data?.engagementLetters?.map((item, index) => ({
+      id: item.id,
       sno: `${index + 1}`.padStart(3, "0"),
       documentType: "Engagement Letter",
       createdOn: formatDate(item.createdAt),
@@ -97,10 +103,12 @@ export function DocumentContent({
     { key: "documentStatus", label: "Document Status" },
     // { key: "preview", label: "Preview" },
     { key: "editDocument", label: "Edit Document" },
+    { key: "export", label: "Export" },
   ];
 
   const documentData =
     data?.data?.documents?.map((item, index) => ({
+      id: item.documents?.id,
       sno: `${index + 1}`.padStart(3, "0"),
       caseName: item.documentName,
       lastUpdated: new Date(item.date).toLocaleDateString("en-GB"),
@@ -110,13 +118,30 @@ export function DocumentContent({
         </Badge>
       ),
       preview: (
-        <Button variant="ghost" size="sm">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => handlePreview(item.id)}
+        >
           <Eye className="w-4 h-4" />
         </Button>
       ),
       editDocument: (
-        <Button variant="ghost" size="sm">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => handleEditDocument(item.id)}
+        >
           <Edit className="w-4 h-4" />
+        </Button>
+      ),
+      export: (
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => downloadPersonalDocument(item.id)}
+        >
+          <Download className="w-4 h-4" />
         </Button>
       ),
     })) || [];
@@ -271,7 +296,11 @@ export function DocumentContent({
           </div>
         </div>
         {documentData.length > 0 ? (
-          <CustomTable columns={documentColumns} data={documentData} />
+          <CustomTable
+            columns={documentColumns}
+            data={documentData}
+            onPreview={handlePreview}
+          />
         ) : (
           <div className="bg-gray-50 border border-gray-200 rounded-lg p-12 text-center cursor-pointer">
             <p className="text-gray-500 text-sm">No document created yet</p>
